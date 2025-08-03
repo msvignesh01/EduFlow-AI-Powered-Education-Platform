@@ -1,72 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   BookOpen,
   Clock,
   Award,
   Zap,
   BarChart,
-  LineChart,
-  PieChart,
   TrendingUp,
-  Users,
   Target,
   ArrowRight,
   Plus,
-  Star,
   Brain,
   RefreshCw,
   Download,
   Share
 } from 'lucide-react';
-import { Card, CardHeader, CardContent } from '../components/ui/Card';
+import { Card } from '../components/ui/Card';
 import { StatCard } from '../components/ui/StatCard';
 import { Button } from '../components/ui/Button';
 import { StatCard as StatCardType } from '../types';
-import { PremiumSkeleton, PremiumLoadingOverlay } from '../components/animations/PremiumLoader';
+import { PremiumSkeleton } from '../components/animations/PremiumLoader';
 import { useAuthStore } from '../store/authStore';
-import { H1, H2, Body, Container } from '../components/ui/Typography';
 import {
   StaggerContainer,
-  StaggerItem,
-  FadeInUp,
-  ScaleIn,
-  HoverLift
+  StaggerItem
 } from '../components/animations/MotionWrapper';
 import {
-  AnimatedBookOpen,
-  AnimatedClock,
-  AnimatedAward,
-  GlowingZap,
-  FloatingBrain,
-  AnimatedTrendingUp
+  FloatingBrain
 } from '../components/animations/AnimatedIcons';
 import { cn, responsive } from '../utils/cn';
 import { useResponsive } from '../hooks/useResponsive';
-// Removed all interactive components - using standard Card component
-// Button already imported above
 import { SEOHead, seoConfigs } from '../components/seo/SEOHead';
-
-// Helper function to get stat icons
-const getStatIcon = (label: string) => {
-  switch (label.toLowerCase()) {
-    case 'study hours':
-      return <AnimatedClock size={32} variant="pulse" />;
-    case 'courses completed':
-      return <AnimatedBookOpen size={32} variant="float" />;
-    case 'achievements':
-      return <AnimatedAward size={32} variant="bounce" />;
-    case 'streak days':
-      return <GlowingZap size={32} />;
-    default:
-      return <AnimatedTrendingUp size={32} variant="float" />;
-  }
-};
 
 export const Dashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { user, isAuthenticated } = useAuthStore();
-  const { isLaptop, isDesktop, isLargeDesktop, isUltraWide, is4K, currentBreakpoint } = useResponsive();
+  const { isLaptop, isDesktop, isLargeDesktop, isUltraWide, is4K } = useResponsive();
 
   useEffect(() => {
     // Simulate loading data
@@ -166,6 +135,54 @@ export const Dashboard: React.FC = () => {
           {/* Background Pattern */}
           <div className="absolute inset-0 bg-gradient-mesh opacity-20" />
           <div className="absolute inset-0 bg-black/10" />
+          
+          {/* Additional floating brains in background */}
+          <div className="absolute inset-0 overflow-hidden">
+            <motion.div
+              className="absolute top-4 right-16 opacity-10"
+              animate={{ 
+                y: [0, -20, 0],
+                rotate: [0, 360]
+              }}
+              transition={{ 
+                duration: 8, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+            >
+              <FloatingBrain size={32} className="text-white" />
+            </motion.div>
+            <motion.div
+              className="absolute bottom-8 left-12 opacity-15"
+              animate={{ 
+                y: [0, -15, 0],
+                rotate: [0, -360]
+              }}
+              transition={{ 
+                duration: 10, 
+                repeat: Infinity, 
+                ease: "easeInOut",
+                delay: 2
+              }}
+            >
+              <FloatingBrain size={24} className="text-white" />
+            </motion.div>
+            <motion.div
+              className="absolute top-12 left-1/3 opacity-10"
+              animate={{ 
+                y: [0, -25, 0],
+                rotate: [0, 180]
+              }}
+              transition={{ 
+                duration: 12, 
+                repeat: Infinity, 
+                ease: "easeInOut",
+                delay: 4
+              }}
+            >
+              <FloatingBrain size={28} className="text-white" />
+            </motion.div>
+          </div>
 
           <div className={cn(
             'relative z-10',
@@ -175,15 +192,36 @@ export const Dashboard: React.FC = () => {
             <div className={cn(
               'flex items-center space-x-4'
             )}>
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-              >
-                <FloatingBrain
-                  size={48}
-                  className="text-white"
-                />
-              </motion.div>
+              {/* Multiple floating brains for better visual interest */}
+              <div className="flex space-x-3">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                >
+                  <FloatingBrain
+                    size={48}
+                    className="text-white"
+                  />
+                </motion.div>
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 25, repeat: Infinity, ease: "linear", delay: 1 }}
+                >
+                  <FloatingBrain
+                    size={36}
+                    className="text-blue-200"
+                  />
+                </motion.div>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear", delay: 2 }}
+                >
+                  <FloatingBrain
+                    size={28}
+                    className="text-purple-200"
+                  />
+                </motion.div>
+              </div>
               <div>
                 <motion.h1
                   className={cn(
@@ -234,13 +272,14 @@ export const Dashboard: React.FC = () => {
       {/* Enhanced Stats Grid */}
       <StaggerItem>
         <div className={cn(
-          'grid gap-6 xl:gap-8 2xl:gap-10',
-          // Desktop-optimized grid layout
-          isLaptop ? 'grid-cols-2' :
-          isDesktop ? 'grid-cols-4' :
-          isLargeDesktop ? 'grid-cols-4' :
-          isUltraWide ? 'grid-cols-6' :
-          is4K ? 'grid-cols-8' : 'grid-cols-4'
+          'grid gap-4 sm:gap-6 lg:gap-8',
+          // Much better responsive grid layout
+          'grid-cols-2 sm:grid-cols-2 lg:grid-cols-4',
+          isLaptop ? 'xl:grid-cols-4' :
+          isDesktop ? '2xl:grid-cols-4' :
+          isLargeDesktop ? '2xl:grid-cols-6' :
+          isUltraWide ? '2xl:grid-cols-8' :
+          is4K ? '2xl:grid-cols-8' : ''
         )}>
           {stats.map((stat, index) => (
             <motion.div
@@ -254,8 +293,8 @@ export const Dashboard: React.FC = () => {
                   title: stat.title,
                   value: stat.value,
                   change: {
-                    value: stat.change.value,
-                    type: stat.change.type,
+                    value: stat.change?.value || 0,
+                    type: stat.change?.type || 'increase',
                   },
                   icon: stat.icon || <BarChart size={24} className="text-gray-600 dark:text-gray-400" />,
                 }}
@@ -268,17 +307,16 @@ export const Dashboard: React.FC = () => {
       {/* Enhanced Interactive Charts Section */}
       <StaggerItem>
         <div className={cn(
-          'grid gap-8 xl:gap-10 2xl:gap-12',
-          // Professional desktop chart layout
-          isLaptop ? 'grid-cols-1' :
-          isDesktop ? 'grid-cols-2' :
-          isLargeDesktop ? 'grid-cols-2' :
-          isUltraWide ? 'grid-cols-3' :
-          is4K ? 'grid-cols-4' : 'grid-cols-2'
+          'grid gap-6 lg:gap-8',
+          // Better responsive chart layout
+          'grid-cols-1 lg:grid-cols-2',
+          isLargeDesktop ? 'xl:grid-cols-2' :
+          isUltraWide ? '2xl:grid-cols-3' :
+          is4K ? '2xl:grid-cols-4' : ''
         )}>
-          <Card className="p-6 xl:p-8 2xl:p-10">
+          <Card className="p-4 lg:p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg xl:text-xl 2xl:text-2xl font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-lg lg:text-xl font-semibold text-gray-900 dark:text-white">
                 Weekly Study Hours
               </h3>
               <div className="flex items-center space-x-2">
@@ -303,13 +341,28 @@ export const Dashboard: React.FC = () => {
                 <motion.div
                   className={cn(
                     'relative bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl overflow-hidden',
-                    'h-64 xl:h-72 2xl:h-80'
+                    'h-48 lg:h-64'
                   )}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 1.2 }}
                 >
                   <div className="absolute inset-0 bg-gradient-mesh opacity-10" />
+                  {/* Floating brain decoration */}
+                  <motion.div
+                    className="absolute top-4 right-4 opacity-20"
+                    animate={{ 
+                      y: [0, -10, 0],
+                      rotate: [0, 180, 360]
+                    }}
+                    transition={{ 
+                      duration: 6, 
+                      repeat: Infinity, 
+                      ease: "easeInOut" 
+                    }}
+                  >
+                    <FloatingBrain size={20} className="text-blue-500" />
+                  </motion.div>
                   <div className="relative z-10 flex justify-center items-center h-full">
                     <div className="text-center">
                       <motion.div
@@ -370,9 +423,9 @@ export const Dashboard: React.FC = () => {
                 </motion.div>
           </Card>
 
-          <Card className="p-6 xl:p-8 2xl:p-10">
+          <Card className="p-4 lg:p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg xl:text-xl 2xl:text-2xl font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-lg lg:text-xl font-semibold text-gray-900 dark:text-white">
                 Learning Progress
               </h3>
               <div className="flex items-center space-x-2">
@@ -397,13 +450,29 @@ export const Dashboard: React.FC = () => {
             <motion.div
               className={cn(
                 'relative bg-gradient-to-br from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-xl overflow-hidden',
-                'h-64 xl:h-72 2xl:h-80'
+                'h-48 lg:h-64'
               )}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 1.4 }}
             >
               <div className="absolute inset-0 bg-gradient-mesh opacity-10" />
+              {/* Floating brain decoration */}
+              <motion.div
+                className="absolute bottom-4 left-4 opacity-20"
+                animate={{ 
+                  y: [0, -12, 0],
+                  rotate: [0, -180, -360]
+                }}
+                transition={{ 
+                  duration: 7, 
+                  repeat: Infinity, 
+                  ease: "easeInOut",
+                  delay: 1
+                }}
+              >
+                <FloatingBrain size={18} className="text-emerald-500" />
+              </motion.div>
               <div className="relative z-10 flex justify-center items-center h-full">
                 <div className="text-center">
                   <motion.div
@@ -456,13 +525,13 @@ export const Dashboard: React.FC = () => {
       {/* Enhanced Recent Activity Section */}
       <StaggerItem>
         <div className={cn(
-          'grid gap-6 grid-cols-1 lg:grid-cols-3'
+          'grid gap-4 lg:gap-6 grid-cols-1 lg:grid-cols-3'
         )}>
           <Card
             className="lg:col-span-2 hover:shadow-lg transition-shadow cursor-pointer"
             onClick={() => console.log('Viewing all activities...')}
           >
-            <div className="p-6">
+            <div className="p-4 lg:p-6">
               <motion.div
                 className="flex items-center justify-between mb-6"
                 initial={{ opacity: 0, y: -10 }}
@@ -553,7 +622,7 @@ export const Dashboard: React.FC = () => {
             </div>
           </Card>
 
-          <Card className="p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+          <Card className="p-4 lg:p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
             <motion.div
               className="flex items-center justify-between mb-6"
               initial={{ opacity: 0, y: -10 }}

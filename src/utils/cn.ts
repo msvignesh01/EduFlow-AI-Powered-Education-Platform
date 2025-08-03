@@ -52,28 +52,27 @@ export const animations = {
 
 // Desktop-first responsive utilities for premium SaaS experience
 export const responsive = {
-  // Container variants optimized for desktop screens (1024px+)
+  // Container variants optimized for better space utilization
   container: {
-    default: 'max-w-7xl mx-auto px-8 xl:px-12 2xl:px-16',
-    narrow: 'max-w-5xl mx-auto px-8 xl:px-12 2xl:px-16',
-    wide: 'max-w-full mx-auto px-8 xl:px-12 2xl:px-16 3xl:px-20',
-    fluid: 'w-full px-8 xl:px-12 2xl:px-16',
-    modal: 'w-full max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-auto px-8',
+    default: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
+    narrow: 'max-w-5xl mx-auto px-4 sm:px-6 lg:px-8',
+    wide: 'max-w-full mx-auto px-4 sm:px-6 lg:px-8',
+    fluid: 'w-full px-4 sm:px-6 lg:px-8',
+    modal: 'w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-4 sm:px-6',
   },
 
-  // Desktop-optimized grid system for professional layouts
+  // Better responsive grid system for full space utilization
   grid: {
     cols1: 'grid grid-cols-1',
-    cols2: 'grid grid-cols-2',
-    cols3: 'grid grid-cols-3',
-    cols4: 'grid grid-cols-4',
-    cols5: 'grid grid-cols-5',
-    cols6: 'grid grid-cols-6',
-    auto: 'grid grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-8',
-    responsive: 'grid grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5',
-    stats: 'grid grid-cols-4 xl:grid-cols-4 2xl:grid-cols-6',
-    // Removed demo grid - no longer needed
-    dashboard: 'grid grid-cols-12 gap-6 xl:gap-8 2xl:gap-10',
+    cols2: 'grid grid-cols-1 sm:grid-cols-2',
+    cols3: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+    cols4: 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4',
+    cols5: 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5',
+    cols6: 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6',
+    auto: 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6',
+    responsive: 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4',
+    stats: 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4',
+    dashboard: 'grid grid-cols-12 gap-4 lg:gap-6',
   },
 
   // Flexible layouts
@@ -90,54 +89,54 @@ export const responsive = {
     responsive: 'flex flex-col md:flex-row md:items-center md:justify-between',
   },
 
-  // Professional spacing system for desktop SaaS applications
+  // Better spacing system for responsive layouts
   spacing: {
-    section: 'py-12 xl:py-16 2xl:py-20',
-    component: 'p-6 xl:p-8 2xl:p-10',
-    tight: 'p-4 xl:p-5 2xl:p-6',
-    loose: 'p-8 xl:p-12 2xl:p-16',
-    card: 'p-6 xl:p-8 2xl:p-10',
-    sidebar: 'p-6 xl:p-8 2xl:p-10',
-    header: 'px-8 py-4 xl:px-12 xl:py-6 2xl:px-16 2xl:py-8',
+    section: 'py-8 lg:py-12',
+    component: 'p-4 lg:p-6',
+    tight: 'p-3 lg:p-4',
+    loose: 'p-6 lg:p-8',
+    card: 'p-4 lg:p-6',
+    sidebar: 'p-4 lg:p-6',
+    header: 'px-4 py-3 sm:px-6 lg:px-8',
     gap: {
-      xs: 'gap-2 xl:gap-3 2xl:gap-4',
-      sm: 'gap-4 xl:gap-5 2xl:gap-6',
-      md: 'gap-6 xl:gap-8 2xl:gap-10',
-      lg: 'gap-8 xl:gap-10 2xl:gap-12',
-      xl: 'gap-10 xl:gap-12 2xl:gap-16',
+      xs: 'gap-2 lg:gap-3',
+      sm: 'gap-3 lg:gap-4',
+      md: 'gap-4 lg:gap-6',
+      lg: 'gap-6 lg:gap-8',
+      xl: 'gap-8 lg:gap-10',
     },
   },
 
-  // Professional typography for desktop SaaS applications
+  // Better responsive typography
   text: {
-    xs: 'text-xs xl:text-sm 2xl:text-sm',
-    sm: 'text-sm xl:text-base 2xl:text-base',
-    base: 'text-base xl:text-lg 2xl:text-lg',
-    lg: 'text-lg xl:text-xl 2xl:text-2xl',
-    xl: 'text-xl xl:text-2xl 2xl:text-3xl',
-    '2xl': 'text-2xl xl:text-3xl 2xl:text-4xl',
-    '3xl': 'text-3xl xl:text-4xl 2xl:text-5xl',
-    '4xl': 'text-4xl xl:text-5xl 2xl:text-6xl',
-    hero: 'text-4xl xl:text-5xl 2xl:text-6xl 3xl:text-7xl',
-    display: 'text-5xl xl:text-6xl 2xl:text-7xl 3xl:text-8xl',
+    xs: 'text-xs lg:text-sm',
+    sm: 'text-sm lg:text-base',
+    base: 'text-base lg:text-lg',
+    lg: 'text-lg lg:text-xl',
+    xl: 'text-xl lg:text-2xl',
+    '2xl': 'text-2xl lg:text-3xl',
+    '3xl': 'text-3xl lg:text-4xl',
+    '4xl': 'text-4xl lg:text-5xl',
+    hero: 'text-4xl lg:text-5xl xl:text-6xl',
+    display: 'text-5xl lg:text-6xl xl:text-7xl',
   },
 
-  // Desktop-optimized component sizing for professional interfaces
+  // Better component sizing for responsive interfaces
   desktop: {
     button: {
-      sm: 'h-9 xl:h-10 2xl:h-11 px-4 xl:px-5 2xl:px-6',
-      md: 'h-10 xl:h-11 2xl:h-12 px-6 xl:px-7 2xl:px-8',
-      lg: 'h-12 xl:h-13 2xl:h-14 px-8 xl:px-10 2xl:px-12',
+      sm: 'h-9 lg:h-10 px-4 lg:px-5',
+      md: 'h-10 lg:h-11 px-6 lg:px-7',
+      lg: 'h-12 lg:h-13 px-8 lg:px-10',
     },
-    input: 'h-10 xl:h-11 2xl:h-12 px-4 xl:px-5 2xl:px-6',
+    input: 'h-10 lg:h-11 px-4 lg:px-5',
     icon: {
-      sm: 'w-4 h-4 xl:w-5 xl:h-5 2xl:w-5 2xl:h-5',
-      md: 'w-5 h-5 xl:w-6 xl:h-6 2xl:w-6 2xl:h-6',
-      lg: 'w-6 h-6 xl:w-7 xl:h-7 2xl:w-8 2xl:h-8',
+      sm: 'w-4 h-4 lg:w-5 lg:h-5',
+      md: 'w-5 h-5 lg:w-6 lg:h-6',
+      lg: 'w-6 h-6 lg:w-7 lg:h-7',
     },
     sidebar: {
-      width: 'w-64 xl:w-72 2xl:w-80',
-      collapsed: 'w-16 xl:w-18 2xl:w-20',
+      width: 'w-56 lg:w-64 xl:w-72',
+      collapsed: 'w-16 lg:w-18',
     },
   },
 

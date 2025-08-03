@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import { useKeyboardNavigation } from '../../hooks/useKeyboardNavigation';
@@ -12,7 +12,7 @@ interface PageLayoutProps {
 
 export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // Default open for desktop
-  const { isLaptop, isDesktop, isLargeDesktop, isUltraWide, is4K, width, height } = useResponsive();
+  const { isDesktop, isLargeDesktop, isUltraWide, is4K } = useResponsive();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -54,8 +54,8 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
         className={cn(
           'flex-1 flex flex-col min-h-screen',
           'transition-all duration-300 ease-in-out',
-          // Desktop-first sidebar spacing with proper margins
-          isSidebarOpen ? 'ml-64 xl:ml-72 2xl:ml-80' : 'ml-0',
+          // Improved responsive sidebar spacing - less cramping
+          isSidebarOpen ? 'ml-56 lg:ml-64 xl:ml-72' : 'ml-0',
           // Ensure proper layout on all desktop sizes
           'min-w-0', // Prevent overflow
         )}
@@ -66,8 +66,8 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
           id="main-content"
           className={cn(
             'flex-1 overflow-y-auto focus:outline-none transition-all duration-300',
-            // Professional desktop spacing with generous padding
-            'px-8 xl:px-12 2xl:px-16 pt-20 xl:pt-24 2xl:pt-28 pb-12 xl:pb-16 2xl:pb-20',
+            // Better responsive padding - not excessive
+            'px-4 sm:px-6 lg:px-8 xl:px-12 pt-16 lg:pt-20 pb-8 lg:pb-12',
             // Smooth scrolling for desktop
             'scroll-smooth',
             // Professional background
@@ -80,7 +80,7 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
         >
           <motion.div
             className={cn(
-              'mx-auto max-w-7xl xl:max-w-full 2xl:max-w-full'
+              'mx-auto w-full max-w-none' // Use full width
             )}
             initial={{ y: 20 }}
             animate={{ y: 0 }}

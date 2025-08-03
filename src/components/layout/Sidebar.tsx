@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   LayoutDashboard,
   User,
@@ -10,12 +10,9 @@ import {
   LogOut,
   BookOpen,
   Lightbulb,
-  X,
-  Menu
+  X
 } from 'lucide-react';
-import { useResponsive } from '../../hooks/useResponsive';
 import { cn, responsive } from '../../utils/cn';
-import { useMicroInteractions } from '../../hooks/useMicroInteractions';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -44,19 +41,11 @@ const secondaryNavItems: NavItem[] = [
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
-  const { isLaptop, isDesktop, isLargeDesktop, isUltraWide, is4K } = useResponsive();
 
   // Desktop-focused sidebar behavior - no touch gestures needed
 
-  const NavItem: React.FC<{ item: NavItem; onClose?: () => void }> = ({ item, onClose }) => {
+  const NavItem: React.FC<{ item: NavItem }> = ({ item }) => {
     const isActive = location.pathname === item.path;
-
-    const microInteractions = useMicroInteractions({
-      enableHaptic: false, // No haptic feedback for desktop
-      onInteraction: (type) => {
-        // Desktop-focused interaction handling
-      },
-    });
 
     return (
       <motion.div
@@ -106,8 +95,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           'fixed inset-y-0 left-0 z-40 flex flex-col',
           'bg-white/98 dark:bg-gray-900/98 backdrop-blur-xl',
           'border-r border-gray-200/80 dark:border-gray-700/80 shadow-xl',
-          // Desktop-optimized width with better proportions
-          'w-64 xl:w-72 2xl:w-80',
+          // Optimized width - less cramping
+          'w-56 lg:w-64 xl:w-72',
           // Smooth transform for desktop interactions
           'transform transition-all duration-300 ease-out',
           isOpen ? 'translate-x-0' : '-translate-x-full',
@@ -160,7 +149,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.4 + index * 0.05 }}
                 >
-                  <NavItem item={item} onClose={onClose} />
+                  <NavItem item={item} />
                 </motion.div>
               ))}
             </motion.nav>
@@ -182,7 +171,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.7 + index * 0.05 }}
                   >
-                    <NavItem item={item} onClose={onClose} />
+                    <NavItem item={item} />
                   </motion.div>
                 ))}
               </nav>
