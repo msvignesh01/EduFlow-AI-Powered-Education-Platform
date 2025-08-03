@@ -1,4 +1,4 @@
-import React from 'react';
+
 
 interface TypographyProps {
   children: React.ReactNode;

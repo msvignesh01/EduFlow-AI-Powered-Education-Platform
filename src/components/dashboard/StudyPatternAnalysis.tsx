@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { BarChart, LineChart, PieChart, Activity } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/Card';
 import { StudySession } from '../../types';

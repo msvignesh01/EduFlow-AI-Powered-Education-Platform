@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { motion } from 'framer-motion';
 import { useResponsive } from '../../hooks/useResponsive';
 import { cn } from '../../utils/cn';

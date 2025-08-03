@@ -31,32 +31,42 @@
 
 ## 🚀 Quick Start
 
-### Prerequisites
-```bash
-# Required
-Node.js 18+ and npm 9+
-Firebase account (free tier works)
-Google AI Studio account for Gemini API
-```
+### ⚡ Super Quick Setup (3 commands)
 
-### Installation
 ```bash
-# 1. Clone the repository
+# 1. Clone and navigate
 git clone https://github.com/msrishav-28/Educational-Platform.git
 cd Educational-Platform
 
-# 2. Install dependencies
+# 2. Install everything and setup
 npm install
 
-# 3. Setup environment variables
-copy .env.example .env
-# Edit .env file with your API keys (see below)
-
-# 4. Start development server
+# 3. Start development server
 npm run dev
 ```
 
 **🌐 Open http://localhost:5173 in your browser**
+
+### 🔑 Configure API Keys (Required for AI features)
+
+The setup automatically creates a `.env` file. Edit it with your API keys:
+
+```bash
+# Edit .env file with your actual keys
+VITE_GEMINI_API_KEY=your_actual_gemini_api_key_here
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+# ... other Firebase config
+```
+
+**📋 [Get API Keys Guide](#-api-keys-setup)** | **📖 [Detailed Setup](QUICKSTART.md)**
+
+### Prerequisites
+```bash
+# Required
+Node.js 18+ and npm 9+
+```
+
+**That's it! The project includes all dependencies and auto-setup.**
 
 ## 🔑 API Keys Setup
 

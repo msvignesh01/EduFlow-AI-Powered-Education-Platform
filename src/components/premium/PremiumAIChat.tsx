@@ -1,5 +1,5 @@
 // Premium Offline-First Chat Component with Dual AI Support
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Send, 

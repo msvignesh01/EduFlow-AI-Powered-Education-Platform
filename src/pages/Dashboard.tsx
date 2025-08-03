@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, createElement } from 'react';
 import { motion } from 'framer-motion';
 import {
   BookOpen,
@@ -660,7 +660,7 @@ export const Dashboard: React.FC = () => {
                   size="md"
                   fullWidth
                   leftIcon={
-                    React.createElement(action.icon, {
+                    createElement(action.icon, {
                       size: 16,
                       className: cn(
                         action.color === 'purple' && "text-purple-600 dark:text-purple-400",

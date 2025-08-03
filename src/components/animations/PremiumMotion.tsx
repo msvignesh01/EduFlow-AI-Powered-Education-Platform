@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { motion, HTMLMotionProps, SVGMotionProps, Variants } from 'framer-motion';
 import { useReducedMotion } from '../../utils/accessibility';
 import { premiumVariants, premiumTransitions } from '../../utils/premiumAnimations';

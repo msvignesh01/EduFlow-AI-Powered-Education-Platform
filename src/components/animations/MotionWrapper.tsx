@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 
 // Premium animation variants

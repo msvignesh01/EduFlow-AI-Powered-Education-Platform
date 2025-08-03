@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { motion } from 'framer-motion';
 import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react';
 import { Card } from './Card';

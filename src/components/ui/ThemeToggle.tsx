@@ -1,4 +1,5 @@
-import React from 'react';
+
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Monitor } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
@@ -16,6 +17,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   className = '',
 }) => {
   const { theme, setTheme, isDark, toggleTheme, isTransitioning } = useTheme();
+  const [isOpen, setIsOpen] = useState(false);
 
   const sizeClasses = {
     sm: 'w-8 h-8',
@@ -83,8 +85,6 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   }
 
   if (variant === 'dropdown') {
-    const [isOpen, setIsOpen] = React.useState(false);
-
     const themes = [
       { value: 'light', label: 'Light', icon: Sun },
       { value: 'dark', label: 'Dark', icon: Moon },
