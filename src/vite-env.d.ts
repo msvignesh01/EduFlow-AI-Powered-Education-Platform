@@ -3,6 +3,11 @@
 interface ImportMetaEnv {
   // AI Configuration
   readonly VITE_GEMINI_API_KEY: string
+  readonly VITE_GEMMA_API_KEY?: string
+  readonly VITE_OLLAMA_ENDPOINT?: string
+  readonly VITE_PREFERRED_AI_MODEL?: string
+  readonly VITE_PREFERRED_AI_PROVIDER?: string
+  readonly VITE_ENABLE_AI_FALLBACK?: string
   
   // Firebase Configuration
   readonly VITE_FIREBASE_API_KEY: string

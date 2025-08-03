@@ -1,33 +1,68 @@
-// Premium AI Service with Gemini 2.0 and Gemma 3 Offline Support
+// Premium Hybrid AI Service - Gemini 2.0 + Gemma 3 (API + Local)
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// AI Model Types
-export type AIModel = 'gemini-2.0-flash' | 'gemma-3-offline' | 'auto';
+// AI Model Types and Providers
+export type AIModel = 'gemini-2.0-flash' | 'gemma-3-api' | 'gemma-3-local' | 'auto';
+export type AIProvider = 'google-gemini' | 'google-gemma' | 'ollama' | 'auto';
 
 export interface AIResponse {
   content: string;
   model: AIModel;
+  provider: AIProvider;
   isOffline: boolean;
   confidence?: number;
   processingTime: number;
+  tokenCount?: number;
 }
 
 export interface AIConfig {
   preferredModel: AIModel;
+  preferredProvider: AIProvider;
   fallbackToOffline: boolean;
+  fallbackToAlternateAPI: boolean;
   maxRetries: number;
   timeout: number;
+  ollamaEndpoint: string;
 }
 
-// Enhanced AI Service Class
-class PremiumAIService {
-  private genAI: GoogleGenerativeAI;
-  private offlineModel: any = null;
-  private isOfflineModelLoaded = false;
+export interface NetworkStatus {
+  isOnline: boolean;
+  isGeminiAvailable: boolean;
+  isGemmaAPIAvailable: boolean;
+  isOllamaAvailable: boolean;
+  lastChecked: number;
+}
+
+// Enhanced Hybrid AI Service Class
+class HybridAIService {
+  private geminiAI: GoogleGenerativeAI;
+  private networkStatus: NetworkStatus;
   private config: AIConfig;
+  private lastHealthCheck = 0;
+  private healthCheckInterval = 30000; // 30 seconds
 
   constructor() {
-    this.genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+    this.geminiAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+    this.config = {
+      preferredModel: 'auto',
+      preferredProvider: 'auto',
+      fallbackToOffline: true,
+      fallbackToAlternateAPI: true,
+      maxRetries: 3,
+      timeout: 30000,
+      ollamaEndpoint: 'http://localhost:11434'
+    };
+    
+    this.networkStatus = {
+      isOnline: navigator.onLine,
+      isGeminiAvailable: false,
+      isGemmaAPIAvailable: false,
+      isOllamaAvailable: false,
+      lastChecked: 0
+    };
+
+    this.initializeService();
+  }
     this.config = {
       preferredModel: 'auto',
       fallbackToOffline: true,
