@@ -50,7 +50,7 @@ class HybridAIService {
       fallbackToAlternateAPI: true,
       maxRetries: 3,
       timeout: 30000,
-      ollamaEndpoint: 'http://localhost:11434'
+      ollamaEndpoint: import.meta.env.VITE_OLLAMA_ENDPOINT || 'http://localhost:11434'
     };
     
     this.networkStatus = {
@@ -300,19 +300,22 @@ class HybridAIService {
   }
 
   private async generateWithOllama(prompt: string): Promise<string> {
+    const ollamaModel = import.meta.env.VITE_OLLAMA_MODEL || 'gemma3:12b';
     const response = await fetch(`${this.config.ollamaEndpoint}/api/generate`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'gemma2:3b', // or gemma2:7b for better quality
+        model: ollamaModel, // Use your Gemma 3 12B model
         prompt: prompt,
         stream: false,
         options: {
           temperature: 0.7,
-          top_p: 0.8,
-          top_k: 40
+          top_p: 0.9,
+          top_k: 40,
+          num_predict: 2048, // Max tokens for 12B model
+          repeat_penalty: 1.1
         }
       }),
       signal: AbortSignal.timeout(this.config.timeout)

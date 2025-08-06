@@ -15,7 +15,7 @@ export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({
   const [currentStep, setCurrentStep] = useState(0);
 
   const loadingSteps = [
-    { icon: GraduationCap, text: 'Initializing EduLearn Platform', color: 'from-blue-500 to-purple-600' },
+    { icon: GraduationCap, text: 'Initializing EduFlow Platform', color: 'from-blue-500 to-purple-600' },
     { icon: Brain, text: 'Loading AI Components', color: 'from-purple-500 to-pink-600' },
     { icon: BookOpen, text: 'Preparing Learning Materials', color: 'from-green-500 to-blue-600' },
     { icon: Sparkles, text: 'Finalizing Experience', color: 'from-orange-500 to-red-600' },
@@ -144,7 +144,7 @@ export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
             >
-              EduLearn
+              EduFlow
             </motion.h1>
 
             <motion.p

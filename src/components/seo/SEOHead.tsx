@@ -16,8 +16,8 @@ interface SEOHeadProps {
 }
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
-  title = 'EduLearn - Premium AI-Powered Learning Platform',
-  description = 'Transform your learning experience with EduLearn\'s AI-powered platform. Interactive courses, personalized study plans, and intelligent tutoring for accelerated learning.',
+  title = 'EduFlow - Premium AI-Powered Learning Platform',
+  description = 'Transform your learning experience with EduFlow\'s AI-powered platform. Interactive courses, personalized study plans, and intelligent tutoring for accelerated learning.',
   keywords = [
     'online learning',
     'AI education',
@@ -33,13 +33,13 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
   image = '/og-image.jpg',
   url = typeof window !== 'undefined' ? window.location.href : '',
   type = 'website',
-  author = 'EduLearn Team',
+  author = 'EduFlow Team',
   publishedTime,
   modifiedTime,
   noIndex = false,
   canonical,
 }) => {
-  const siteTitle = 'EduLearn';
+  const siteTitle = 'EduFlow';
   const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
   const keywordsString = keywords.join(', ');
 

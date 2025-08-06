@@ -17,7 +17,7 @@ interface CacheConfig {
 class PremiumStorageService {
   private config: CacheConfig;
   private readonly version = '1.0.0';
-  private readonly storagePrefix = 'edulearn_';
+  private readonly storagePrefix = 'eduflow_';
 
   constructor() {
     this.config = {

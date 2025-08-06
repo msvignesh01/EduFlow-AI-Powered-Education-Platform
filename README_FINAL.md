@@ -1,7 +1,14 @@
-# 🎓 EduLearn Platform - Premium AI-Powered Educational Assistant
+# 🎓 EduFlow Platform - Premium AI-Powered Educational Assistant
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://reactjs.org/)
+[![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://re- 📞 Email: support@eduflow.com
+- 💬 Discord: [Join our community](https://discord.gg/eduflow)
+- 📚 Docs: [Documentation](https://docs.eduflow.com)
+- 🐛 Issues: [GitHub Issues](https://github.com/msrishav-28/eduflow-platform/issues)
+
+---
+
+**Built with ❤️ by the EduFlow Team**g/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5.3-blue.svg)](https://www.typescriptlang.org/)
 [![Firebase](https://img.shields.io/badge/Firebase-10.13.0-orange.svg)](https://firebase.google.com/)
 
@@ -107,7 +114,7 @@ npm run build        # Test production build
 ## 🏗️ Project Structure
 
 ```
-edu-learn-platform/
+eduflow-platform/
 ├── src/
 │   ├── components/          # Reusable UI components
 │   │   ├── animations/      # Premium motion components

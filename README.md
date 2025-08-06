@@ -1,4 +1,4 @@
-# 🎓 AI Educational Platform
+# 🎓 EduFlow - AI Educational Platform
 
 > A modern educational platform with dual AI support (Gemini 2.0 + Gemma 3), Firebase backend, and premium responsive design.
 

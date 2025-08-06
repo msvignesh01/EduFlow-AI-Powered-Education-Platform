@@ -2,7 +2,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // AI Model Types and Providers
-export type AIModel = 'gemini-2.0-flash' | 'gemma-3-api' | 'gemma-3-local' | 'auto';
+export type AIModel = 'gemini-2.0-flash' | 'gemma-3-api' | 'gemma-3-local' | 'gemma-3-offline' | 'auto';
 export type AIProvider = 'google-gemini' | 'google-gemma' | 'ollama' | 'auto';
 
 export interface AIResponse {
@@ -40,6 +40,8 @@ class HybridAIService {
   private config: AIConfig;
   private lastHealthCheck = 0;
   private healthCheckInterval = 30000; // 30 seconds
+  private isOfflineModelLoaded = false;
+  private offlineModel: any = null;
 
   constructor() {
     this.geminiAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
@@ -50,7 +52,7 @@ class HybridAIService {
       fallbackToAlternateAPI: true,
       maxRetries: 3,
       timeout: 30000,
-      ollamaEndpoint: 'http://localhost:11434'
+      ollamaEndpoint: import.meta.env.VITE_OLLAMA_ENDPOINT || 'http://localhost:11434'
     };
     
     this.networkStatus = {
@@ -63,15 +65,31 @@ class HybridAIService {
 
     this.initializeService();
   }
-    this.config = {
-      preferredModel: 'auto',
-      fallbackToOffline: true,
-      maxRetries: 3,
-      timeout: 30000
-    };
 
-    // Initialize offline model
-    this.initializeOfflineModel();
+  // Initialize services and check availability
+  private async initializeService() {
+    try {
+      await this.checkNetworkStatus();
+      console.log('🚀 Hybrid AI Service initialized successfully');
+    } catch (error) {
+      console.error('❌ Failed to initialize AI service:', error);
+    }
+  }
+
+  // Check network status and AI service availability
+  private async checkNetworkStatus(): Promise<void> {
+    this.networkStatus.isOnline = navigator.onLine;
+    this.networkStatus.lastChecked = Date.now();
+    
+    if (this.networkStatus.isOnline) {
+      // Check Gemini availability
+      try {
+        const model = this.geminiAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+        this.networkStatus.isGeminiAvailable = true;
+      } catch {
+        this.networkStatus.isGeminiAvailable = false;
+      }
+    }
   }
 
   // Initialize Gemma 3 Offline Model (simulated - would use actual model loading)
@@ -126,7 +144,7 @@ class HybridAIService {
 
   // Generate content using Gemini 2.0 Flash
   private async generateWithGemini(prompt: string): Promise<string> {
-    const model = this.genAI.getGenerativeModel({ 
+    const model = this.geminiAI.getGenerativeModel({ 
       model: "gemini-2.0-flash-exp",
       generationConfig: {
         temperature: 0.7,
@@ -202,6 +220,7 @@ class HybridAIService {
       return {
         content,
         model: modelToUse,
+        provider: modelToUse === 'gemini-2.0-flash' ? 'google-gemini' : 'ollama',
         isOffline,
         confidence: isOffline ? 0.8 : 0.95,
         processingTime
@@ -225,6 +244,7 @@ class HybridAIService {
           return {
             content: content + '\n\n⚠️ Generated using offline fallback model.',
             model: 'gemma-3-offline',
+            provider: 'ollama',
             isOffline: true,
             confidence: 0.7,
             processingTime
@@ -317,7 +337,7 @@ class HybridAIService {
 }
 
 // Create singleton instance
-export const aiService = new PremiumAIService();
+export const aiService = new HybridAIService();
 
 // Legacy function for backward compatibility
 export const generateContent = async (prompt: string): Promise<string> => {

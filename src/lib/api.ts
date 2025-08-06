@@ -1,4 +1,4 @@
-// Centralized API client for EduLearn Platform
+// Centralized API client for EduFlow Platform
 class ApiClient {
   private baseURL: string;
 

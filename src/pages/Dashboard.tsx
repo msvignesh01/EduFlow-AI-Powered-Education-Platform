@@ -232,7 +232,7 @@ export const Dashboard: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                 >
-                  {isAuthenticated ? `Welcome back, ${user?.username}!` : 'Welcome to EduLearn'}
+                  {isAuthenticated ? `Welcome back, ${user?.username}!` : 'Welcome to EduFlow'}
                 </motion.h1>
                 <motion.p
                   className={cn(
