@@ -85,7 +85,7 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
   }, [options.preferredModel, options.preferredProvider, options.autoHealthCheck]);
 
   // Generate content
-  const generateContent = useCallback(async (prompt: string): Promise<AIResponse> => {
+  const generateContent = useCallback(async (prompt: string, forceMode: boolean = false): Promise<AIResponse> => {
     if (!prompt.trim()) {
       throw new Error('Prompt cannot be empty');
     }
@@ -94,7 +94,7 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
     setError(null);
 
     try {
-      const result = await hybridAI.generateContent(prompt);
+      const result = await hybridAI.generateContent(prompt, {}, forceMode);
       setResponse(result);
       
       // Update network status after successful call
@@ -104,6 +104,20 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
       return result;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'AI generation failed';
+      console.error('🚨 AI Generation Error:', errorMessage);
+      
+      // Try with force mode if regular mode failed
+      if (!forceMode && errorMessage.includes('No AI services available')) {
+        console.warn('⚠️ Retrying with force mode...');
+        try {
+          const retryResult = await hybridAI.generateContent(prompt, {}, true);
+          setResponse(retryResult);
+          return retryResult;
+        } catch (retryErr) {
+          console.error('🚨 Force mode also failed:', retryErr);
+        }
+      }
+      
       setError(errorMessage);
       throw err;
     } finally {

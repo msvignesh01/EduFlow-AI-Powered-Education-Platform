@@ -143,11 +143,11 @@ class HybridAIService {
   }
 
   // Smart Model Selection
-  private selectBestModel(): { model: AIModel; provider: AIProvider } {
+  private selectBestModel(forceMode: boolean = false): { model: AIModel; provider: AIProvider } {
     // If user specified a preference and it's available
     if (this.config.preferredModel !== 'auto') {
       const isAvailable = this.isModelAvailable(this.config.preferredModel);
-      if (isAvailable) {
+      if (isAvailable || forceMode) {
         return {
           model: this.config.preferredModel,
           provider: this.getProviderForModel(this.config.preferredModel)
@@ -156,11 +156,11 @@ class HybridAIService {
     }
 
     // Auto-selection based on availability and performance
-    if (this.networkStatus.isGeminiAvailable) {
+    if (this.networkStatus.isGeminiAvailable || forceMode) {
       return { model: 'gemini-2.0-flash', provider: 'google-gemini' };
     }
     
-    if (this.networkStatus.isGemmaAPIAvailable) {
+    if (this.networkStatus.isGemmaAPIAvailable || forceMode) {
       return { model: 'gemma-3-api', provider: 'google-gemma' };
     }
     
@@ -168,8 +168,13 @@ class HybridAIService {
       return { model: 'gemma-3-local', provider: 'ollama' };
     }
 
-    // Fallback to any available option
-    throw new Error('No AI services available');
+    // Fallback to any available option - try Gemini anyway in force mode
+    if (forceMode) {
+      console.warn('⚠️ Force mode: Attempting Gemini despite health check failure');
+      return { model: 'gemini-2.0-flash', provider: 'google-gemini' };
+    }
+    
+    throw new Error('No AI services available. Please check your API keys and network connection.');
   }
 
   private isModelAvailable(model: AIModel): boolean {
@@ -201,17 +206,20 @@ class HybridAIService {
   // Generate Content with Intelligent Routing
   public async generateContent(
     prompt: string,
-    options: Partial<AIConfig> = {}
+    options: Partial<AIConfig> = {},
+    forceMode: boolean = false
   ): Promise<AIResponse> {
     const startTime = Date.now();
     const config = { ...this.config, ...options };
 
-    // Health check if needed
-    await this.checkServiceHealth();
+    // Health check if needed (skip in force mode for faster response)
+    if (!forceMode) {
+      await this.checkServiceHealth();
+    }
 
     try {
-      const { model, provider } = this.selectBestModel();
-      console.log(`🤖 Using ${model} via ${provider}`);
+      const { model, provider } = this.selectBestModel(forceMode);
+      console.log(`🤖 Using ${model} via ${provider} ${forceMode ? '(force mode)' : ''}`);
 
       let content: string;
       let isOffline = false;
@@ -244,6 +252,24 @@ class HybridAIService {
 
     } catch (error) {
       console.error('❌ AI Generation failed:', error);
+      
+      // Try different approaches in force mode
+      if (forceMode && !this.networkStatus.isOllamaAvailable) {
+        console.warn('⚠️ Force mode: Trying direct Gemini call despite errors');
+        try {
+          const content = await this.generateWithGemini(prompt);
+          return {
+            content,
+            model: 'gemini-2.0-flash',
+            provider: 'google-gemini',
+            isOffline: false,
+            processingTime: Date.now() - startTime,
+            confidence: 0.7
+          };
+        } catch (geminiError) {
+          console.error('❌ Direct Gemini call also failed:', geminiError);
+        }
+      }
       
       // Try fallback if enabled
       if (config.fallbackToOffline && this.networkStatus.isOllamaAvailable) {
