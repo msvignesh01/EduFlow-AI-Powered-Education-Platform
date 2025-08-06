@@ -1,5 +1,6 @@
 
 import { motion, HTMLMotionProps } from 'framer-motion';
+import React from 'react';
 import { cn } from '../../utils/cn';
 import { PremiumLoader } from '../animations/PremiumLoader';
 
@@ -166,3 +167,5 @@ export const Button: React.FC<ButtonProps> = ({
     </motion.button>
   );
 };
+
+export default Button;

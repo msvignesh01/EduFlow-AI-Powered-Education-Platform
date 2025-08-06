@@ -11,6 +11,7 @@ import CareerGuidanceChatbot from './components/career/CareerGuidanceChatbot';
 import StudyMaterials from './components/materials/StudyMaterials';
 import QuizComponent from './components/quiz/QuizComponent';
 import useHybridAI from './hooks/useHybridAI';
+import { studyService } from './services/studyService';
 
 // Clean Navbar with Firebase Auth
 const EduNavbar = () => {
@@ -116,30 +117,90 @@ const EduNavbar = () => {
 // Educational Dashboard Component
 const EduDashboard = () => {
   const [stats, setStats] = useState({
-    studyHours: 42.5,
-    courses: 7,
-    streak: 12,
-    points: 1240
+    studyHours: 0,
+    courses: 0,
+    streak: 0,
+    points: 0
   });
-  const { generateContent, isLoading } = useHybridAI();
+  const [isLoading, setIsLoading] = useState(true);
+  const [recentSessions, setRecentSessions] = useState<any[]>([]);
+  const { generateContent, isLoading: aiLoading } = useHybridAI();
 
-  const updateStats = () => {
-    setStats(prev => ({
-      studyHours: prev.studyHours + 0.5,
-      courses: prev.courses + (Math.random() > 0.8 ? 1 : 0),
-      streak: prev.streak + 1,
-      points: prev.points + Math.floor(Math.random() * 50) + 10
-    }));
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  const loadDashboardData = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Get user stats from Firebase
+      const userStats = await studyService.getUserStats();
+      const recent = await studyService.getRecentSessions(7);
+      
+      setStats({
+        studyHours: userStats.totalHours,
+        courses: userStats.totalSessions,
+        streak: userStats.currentStreak,
+        points: Math.floor(userStats.totalHours * 100 + userStats.completedQuizzes * 50)
+      });
+      
+      setRecentSessions(recent);
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const completeStudySession = async () => {
+    // Record a study session
+    await studyService.saveStudySession({
+      duration: 30, // 30 minute session
+      subject: 'General Study',
+      type: 'material'
+    });
+    
+    // Reload data to show updated stats
+    await loadDashboardData();
   };
 
   const handleGenerateQuiz = async () => {
     try {
       const response = await generateContent('Generate a 5-question multiple choice quiz about basic mathematics');
-      alert(`✅ Quiz Generated!\n\n${response.substring(0, 200)}...`);
+      const responseText = typeof response === 'string' ? response : response.content || 'Could not generate quiz.';
+      alert(`✅ Quiz Generated!\n\n${responseText.substring(0, 200)}...`);
+      
+      // Track this as a study session
+      await studyService.saveStudySession({
+        duration: 10,
+        subject: 'Mathematics',
+        type: 'quiz'
+      });
+      
+      await loadDashboardData();
     } catch (error) {
       alert('❌ Error generating quiz. Please check your AI configuration.');
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="animate-pulse">
+          <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
+          <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-8"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -156,8 +217,8 @@ const EduDashboard = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {[
-          { title: "Study Hours", value: stats.studyHours.toString(), icon: "📚", color: "blue" },
-          { title: "Courses", value: stats.courses.toString(), icon: "🎓", color: "purple" },
+          { title: "Study Hours", value: stats.studyHours.toFixed(1), icon: "📚", color: "blue" },
+          { title: "Sessions", value: stats.courses.toString(), icon: "🎓", color: "purple" },
           { title: "Streak", value: `${stats.streak} days`, icon: "🔥", color: "green" },
           { title: "Points", value: stats.points.toLocaleString(), icon: "🏆", color: "yellow" }
         ].map((stat, index) => (
@@ -177,6 +238,38 @@ const EduDashboard = () => {
         ))}
       </div>
 
+      {/* Recent Activity Section */}
+      {recentSessions.length > 0 && (
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Recent Activity</h2>
+          <div className="space-y-2">
+            {recentSessions.slice(0, 5).map((session, index) => (
+              <div key={index} className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700 last:border-0">
+                <div className="flex items-center space-x-3">
+                  <span className="text-2xl">
+                    {session.type === 'quiz' ? '📝' : 
+                     session.type === 'chat' ? '💬' : 
+                     session.type === 'career' ? '🎯' : '📚'}
+                  </span>
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">{session.subject}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {session.duration} minutes
+                      {session.score !== undefined && ` • Score: ${session.score}%`}
+                    </p>
+                  </div>
+                </div>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {session.completedAt?.toDate ? 
+                    new Date(session.completedAt.toDate()).toLocaleDateString() : 
+                    'Today'}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
@@ -188,7 +281,10 @@ const EduDashboard = () => {
             >
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">🤖</span>
-                <span className="font-medium text-gray-900 dark:text-white">AI Tutor Chat</span>
+                <div className="flex-1">
+                  <span className="font-medium text-gray-900 dark:text-white">AI Tutor Chat</span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Get instant help with your studies</p>
+                </div>
               </div>
             </Link>
             
@@ -198,7 +294,10 @@ const EduDashboard = () => {
             >
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">🎯</span>
-                <span className="font-medium text-gray-900 dark:text-white">Career Guidance</span>
+                <div className="flex-1">
+                  <span className="font-medium text-gray-900 dark:text-white">Career Guidance</span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Explore career paths and opportunities</p>
+                </div>
               </div>
             </Link>
             
@@ -208,7 +307,10 @@ const EduDashboard = () => {
             >
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">📚</span>
-                <span className="font-medium text-gray-900 dark:text-white">Study Materials</span>
+                <div className="flex-1">
+                  <span className="font-medium text-gray-900 dark:text-white">Study Materials</span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Access your learning resources</p>
+                </div>
               </div>
             </Link>
             
@@ -218,49 +320,71 @@ const EduDashboard = () => {
             >
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">🧠</span>
-                <span className="font-medium text-gray-900 dark:text-white">Interactive Quizzes</span>
+                <div className="flex-1">
+                  <span className="font-medium text-gray-900 dark:text-white">Interactive Quizzes</span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Test your knowledge</p>
+                </div>
               </div>
             </Link>
 
             <button
-              onClick={updateStats}
+              onClick={completeStudySession}
               className="w-full text-left p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 transition-all"
             >
               <div className="flex items-center space-x-3">
                 <span className="text-2xl">🚀</span>
-                <span className="font-medium text-gray-900 dark:text-white">Complete Study Session</span>
+                <div className="flex-1">
+                  <span className="font-medium text-gray-900 dark:text-white">Complete Study Session</span>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Record a 30-minute study session</p>
+                </div>
               </div>
             </button>
           </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">AI System Status</h2>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Quick Stats</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Gemini 2.0 Flash</span>
-              <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-1 rounded text-sm">✅ Connected</span>
+              <span className="text-gray-600 dark:text-gray-400">Today's Progress</span>
+              <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-1 rounded text-sm">
+                {recentSessions.filter(s => {
+                  const today = new Date();
+                  const sessionDate = s.completedAt?.toDate ? new Date(s.completedAt.toDate()) : new Date();
+                  return sessionDate.toDateString() === today.toDateString();
+                }).length} sessions
+              </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Ollama Local</span>
-              <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-1 rounded text-sm">✅ Ready</span>
+              <span className="text-gray-600 dark:text-gray-400">This Week</span>
+              <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-1 rounded text-sm">
+                {recentSessions.length} sessions
+              </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Firebase Auth</span>
-              <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-1 rounded text-sm">✅ Active</span>
+              <span className="text-gray-600 dark:text-gray-400">Completion Rate</span>
+              <span className="bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200 px-2 py-1 rounded text-sm">
+                {stats.courses > 0 ? Math.round((stats.courses / (stats.courses + 5)) * 100) : 0}%
+              </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-600 dark:text-gray-400">Educational Components</span>
-              <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-1 rounded text-sm">✅ Loaded</span>
+              <span className="text-gray-600 dark:text-gray-400">Learning Streak</span>
+              <span className={`px-2 py-1 rounded text-sm ${
+                stats.streak > 0 
+                  ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200' 
+                  : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+              }`}>
+                {stats.streak > 0 ? `${stats.streak} days 🔥` : 'Start today!'}
+              </span>
             </div>
             
             <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
               <button
                 onClick={handleGenerateQuiz}
-                disabled={isLoading}
+                disabled={aiLoading}
                 className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
               >
-                {isLoading ? 'Generating...' : '🧠 Test AI Quiz Generation'}
+                {aiLoading ? 'Generating...' : '🧠 Test AI Quiz Generation'}
               </button>
             </div>
           </div>
@@ -292,14 +416,22 @@ const AIChat = () => {
 
     try {
       const response = await generateContent(currentInput);
+      const responseText = typeof response === 'string' ? response : response.content || 'Sorry, I could not generate a response.';
       
       const aiMessage = {
         id: (Date.now() + 1).toString(),
-        content: response,
+        content: responseText,
         sender: 'ai' as const,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, aiMessage]);
+      
+      // Track study session
+      await studyService.saveStudySession({
+        duration: 5, // Estimate 5 minutes per chat
+        subject: 'AI Chat',
+        type: 'chat'
+      });
     } catch (error: any) {
       console.error('AI Error:', error);
       const errorMessage = {
@@ -386,29 +518,76 @@ const AIChat = () => {
 // Study Analytics Component
 const StudyAnalytics = () => {
   const [studyData, setStudyData] = useState({
-    totalSessions: 15,
-    totalHours: 42.5,
-    averageScore: 85,
+    totalSessions: 0,
+    totalHours: 0,
+    averageScore: 0,
     weeklyGoal: 20,
-    completedQuizzes: 12,
-    currentStreak: 7
+    completedQuizzes: 0,
+    currentStreak: 0
   });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    loadStudyData();
+  }, []);
+
+  const loadStudyData = async () => {
+    try {
+      setIsLoading(true);
+      const stats = await studyService.getUserStats();
+      setStudyData(stats);
+    } catch (error) {
+      console.error('Error loading study data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const weeklyProgress = Math.min((studyData.totalHours / studyData.weeklyGoal) * 100, 100);
 
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-8"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-2"></div>
+                <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Study Analytics</h1>
-      <p className="text-gray-600 dark:text-gray-400 mb-8">
-        📊 Track your learning progress and get insights to improve your study habits
-      </p>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Study Analytics</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            📊 Track your learning progress and get insights to improve your study habits
+          </p>
+        </div>
+        <button
+          onClick={loadStudyData}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+        >
+          Refresh
+        </button>
+      </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Sessions</h3>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">{studyData.totalSessions}</p>
           <div className="flex items-center mt-2">
-            <span className="text-green-500 text-sm">📈 Active learner</span>
+            <span className="text-green-500 text-sm">
+              {studyData.totalSessions > 0 ? '📈 Active learner' : '🚀 Start learning!'}
+            </span>
           </div>
         </div>
         
@@ -428,9 +607,15 @@ const StudyAnalytics = () => {
         
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Average Quiz Score</h3>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">{studyData.averageScore}%</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">
+            {studyData.averageScore || 0}%
+          </p>
           <div className="flex items-center mt-2">
-            <span className="text-green-500 text-sm">🎯 Excellent!</span>
+            <span className="text-green-500 text-sm">
+              {studyData.averageScore >= 80 ? '🎯 Excellent!' : 
+               studyData.averageScore >= 60 ? '📚 Good progress' : 
+               '💪 Keep practicing'}
+            </span>
           </div>
         </div>
         
@@ -438,7 +623,9 @@ const StudyAnalytics = () => {
           <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">Current Streak</h3>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">{studyData.currentStreak} days</p>
           <div className="flex items-center mt-2">
-            <span className="text-orange-500 text-sm">🔥 Keep it up!</span>
+            <span className="text-orange-500 text-sm">
+              {studyData.currentStreak > 0 ? '🔥 Keep it up!' : '🌟 Start today!'}
+            </span>
           </div>
         </div>
       </div>
@@ -449,19 +636,25 @@ const StudyAnalytics = () => {
           <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <h3 className="font-medium text-blue-900 dark:text-blue-200">📚 Study Pattern Analysis</h3>
             <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
-              You're most productive during morning hours. Consider scheduling challenging topics between 9-11 AM.
+              {studyData.totalSessions > 0 
+                ? "You're building great study habits! Keep up the consistent learning."
+                : "Start your learning journey today with AI-powered tutoring and quizzes."}
             </p>
           </div>
           <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
             <h3 className="font-medium text-green-900 dark:text-green-200">🎯 Performance Trends</h3>
             <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-              Your quiz scores have improved by 15% this month. Great progress on mathematical concepts!
+              {studyData.averageScore > 0 
+                ? `Your current average score is ${studyData.averageScore}%. ${studyData.averageScore >= 80 ? 'Excellent work!' : 'Keep practicing to improve!'}`
+                : "Complete some quizzes to see your performance trends here."}
             </p>
           </div>
           <div className="p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
             <h3 className="font-medium text-purple-900 dark:text-purple-200">💡 AI Recommendations</h3>
             <p className="text-sm text-purple-700 dark:text-purple-300 mt-1">
-              Try incorporating more visual learning materials for better retention of complex concepts.
+              {studyData.currentStreak > 0 
+                ? `Great ${studyData.currentStreak}-day streak! Try exploring different subjects to broaden your knowledge.`
+                : "Start with our AI tutor to get personalized learning recommendations."}
             </p>
           </div>
         </div>

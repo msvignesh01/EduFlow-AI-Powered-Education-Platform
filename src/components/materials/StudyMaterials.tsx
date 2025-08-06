@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BookOpen, FileText, Video, Gamepad2, Clock, BookMarked, Search } from 'lucide-react';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/Card';
+import { Card, CardContent, CardHeader } from '../ui/Card';
 import { StudyMaterial } from '../../types';
 
 // Mock study materials data

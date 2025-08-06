@@ -182,3 +182,9 @@ export const CardFooter: React.FC<CardFooterProps> = ({
     </div>
   );
 };
+
+// Add these type exports for compatibility
+export const CardTitle = CardHeader;
+export const CardDescription = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
+  <p className={`text-sm text-gray-600 dark:text-gray-400 ${className}`}>{children}</p>
+);

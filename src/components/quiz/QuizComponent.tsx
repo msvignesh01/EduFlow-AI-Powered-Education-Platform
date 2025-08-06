@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Clock, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 import Button from '../ui/Button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/Card';
+import { Card, CardContent } from '../ui/Card';
 import { Quiz, Question } from '../../types';
+import { studyService } from '../../services/studyService';
 
 // Mock quiz data
 const mockQuizData: Quiz = {
@@ -65,7 +66,7 @@ const QuizComponent: React.FC = () => {
     setSelectedOption(optionIndex);
   };
   
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (selectedOption !== null) {
       setAnswers([...answers, selectedOption]);
       
@@ -75,6 +76,21 @@ const QuizComponent: React.FC = () => {
         setTimer(60); // Reset timer for the next question
       } else {
         setHasSubmitted(true);
+        
+        // Track quiz completion
+        try {
+          const score = calculateScore();
+          const percentage = getScorePercentage();
+          
+          await studyService.saveStudySession({
+            duration: currentQuizData?.questions.length || 5,
+            subject: currentQuizData?.subject || 'General',
+            score: percentage,
+            type: 'quiz'
+          });
+        } catch (error) {
+          console.error('Error tracking quiz completion:', error);
+        }
       }
     }
   };
@@ -120,12 +136,12 @@ const QuizComponent: React.FC = () => {
         </p>
         
         <Card>
-          <CardHeader>
-            <CardTitle>{currentQuizData?.title}</CardTitle>
-            <CardDescription>
+          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 className="text-lg font-semibold">{currentQuizData?.title}</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               Subject: {currentQuizData?.subject} • {currentQuizData?.questions.length} Questions • Estimated Time: {currentQuizData?.questions.length} minutes
-            </CardDescription>
-          </CardHeader>
+            </p>
+          </div>
           <CardContent>
             <div className="prose dark:prose-invert max-w-none">
               <p>
@@ -244,14 +260,14 @@ const QuizComponent: React.FC = () => {
       </div>
       
       <Card>
-        <CardHeader>
+        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
           <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
             <div 
               className="bg-blue-600 h-2 transition-all"
               style={{ width: `${((currentQuestionIndex) / (currentQuizData?.questions.length || 1)) * 100}%` }}
             ></div>
           </div>
-        </CardHeader>
+        </div>
         <CardContent>
           <div className="space-y-6">
             <h3 className="text-xl font-medium text-gray-900 dark:text-white">{currentQuestion?.text}</h3>
