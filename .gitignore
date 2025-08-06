@@ -94,3 +94,8 @@ pids/
 *.zip
 *.tar.gz
 *.rar
+
+# Documentation files (keep local only)
+*HANDOVER*.txt
+PROJECT_HANDOVER_DOCUMENTATION*.txt
+ESSENTIAL_FILES_FOR_AI_HANDOVER*.txt
