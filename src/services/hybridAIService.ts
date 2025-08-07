@@ -37,12 +37,12 @@ class HybridAIService {
     }
   }
 
-  // Set preferred AI model
+
   setPreferredModel(model: 'gemini' | 'ollama' | 'auto'): void {
     this.preferredModel = model;
   }
 
-  // Get available models
+
   async getAvailableModels(): Promise<{ gemini: boolean; ollama: boolean; ollamaModels: string[] }> {
     const ollamaAvailable = await ollamaService.checkAvailability();
     const ollamaModels = ollamaAvailable ? await ollamaService.getModels() : [];
@@ -54,7 +54,7 @@ class HybridAIService {
     };
   }
 
-  // Smart model selection
+
   private async selectModel(forceModel?: 'gemini' | 'ollama'): Promise<'gemini' | 'ollama'> {
     if (forceModel) return forceModel;
     
@@ -65,12 +65,12 @@ class HybridAIService {
         return (await ollamaService.checkAvailability()) ? 'ollama' : 'gemini';
       case 'auto':
       default:
-        // Auto-select based on availability and task type
+
         const ollamaAvailable = await ollamaService.checkAvailability();
         
-        // Prefer Ollama for privacy-sensitive tasks, Gemini for complex reasoning
+
         if (ollamaAvailable && this.geminiModel) {
-          // Use Ollama for local processing when available
+
           return 'ollama';
         } else if (this.geminiModel) {
           return 'gemini';
@@ -82,7 +82,7 @@ class HybridAIService {
     }
   }
 
-  // Generate text response
+
   async generateText(prompt: string, forceModel?: 'gemini' | 'ollama'): Promise<AIResponse> {
     const startTime = Date.now();
     const selectedModel = await this.selectModel(forceModel);
@@ -105,7 +105,7 @@ class HybridAIService {
     } catch (error: any) {
       console.error(`Error with ${selectedModel}:`, error);
       
-      // Fallback to the other model
+
       const fallbackModel = selectedModel === 'gemini' ? 'ollama' : 'gemini';
       
       try {
@@ -135,7 +135,7 @@ class HybridAIService {
     }
   }
 
-  // Generate streaming response
+
   async generateStreamingText(
     prompt: string,
     onChunk: (chunk: string, model: 'gemini' | 'ollama') => void,
@@ -167,7 +167,7 @@ class HybridAIService {
     }
   }
 
-  // Educational features
+
   async generateQuiz(
     topic: string, 
     difficulty: 'easy' | 'medium' | 'hard' = 'medium',
@@ -200,16 +200,16 @@ Requirements:
     try {
       const response = await this.generateText(prompt);
       
-      // Extract JSON from response
+
       let jsonStr = response.text;
       
-      // Try to find JSON in the response
+
       const jsonMatch = jsonStr.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         jsonStr = jsonMatch[0];
       }
       
-      // Clean up common JSON formatting issues
+
       jsonStr = jsonStr
         .replace(/```json\n?/g, '')
         .replace(/```\n?/g, '')
@@ -217,7 +217,7 @@ Requirements:
       
       const quiz = JSON.parse(jsonStr);
       
-      // Validate quiz structure
+
       if (!quiz.questions || !Array.isArray(quiz.questions)) {
         throw new Error('Invalid quiz format');
       }
@@ -226,7 +226,7 @@ Requirements:
     } catch (error: any) {
       console.error('Error generating quiz:', error);
       
-      // Fallback: create a simple quiz structure
+
       return {
         title: `Quiz about ${topic}`,
         topic,
@@ -248,7 +248,7 @@ Requirements:
     }
   }
 
-  // Analyze study materials
+
   async analyzeStudyMaterial(text: string, analysisType: 'summary' | 'key_points' | 'concepts' = 'summary'): Promise<AIResponse> {
     let prompt = '';
     
@@ -279,7 +279,7 @@ Main Concepts:`;
     return await this.generateText(prompt);
   }
 
-  // Answer questions about uploaded content
+
   async answerQuestion(question: string, context: string): Promise<AIResponse> {
     const prompt = `Based on the following context, please answer the question accurately and completely. If the answer is not clearly available in the context, please say so.
 
@@ -293,7 +293,7 @@ Answer:`;
     return await this.generateText(prompt);
   }
 
-  // Generate study recommendations
+
   async generateStudyRecommendations(
     subject: string,
     currentLevel: string,
@@ -319,7 +319,7 @@ Study Recommendations:`;
     return await this.generateText(prompt);
   }
 
-  // Check AI service health
+
   async healthCheck(): Promise<{
     gemini: { available: boolean; error?: string };
     ollama: { available: boolean; error?: string; models?: string[] };
@@ -329,7 +329,7 @@ Study Recommendations:`;
       ollama: { available: false, error: undefined as string | undefined, models: undefined as string[] | undefined }
     };
 
-    // Check Gemini
+
     try {
       if (this.geminiModel) {
         await this.geminiModel.generateContent('Test');
@@ -341,7 +341,7 @@ Study Recommendations:`;
       result.gemini.error = error.message;
     }
 
-    // Check Ollama
+
     try {
       const available = await ollamaService.checkAvailability();
       result.ollama.available = available;

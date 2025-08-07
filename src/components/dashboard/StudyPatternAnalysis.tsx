@@ -8,7 +8,7 @@ interface StudyPatternAnalysisProps {
 }
 
 const StudyPatternAnalysis: React.FC<StudyPatternAnalysisProps> = ({ studySessions }) => {
-  // This is placeholder data, in a real app these would be calculated from studySessions
+
   const averageProductivity = 7.5;
   const totalStudyHours = 28;
   const mostProductiveTime = "9:00 AM - 11:00 AM";
@@ -92,50 +92,8 @@ const StudyPatternAnalysis: React.FC<StudyPatternAnalysisProps> = ({ studySessio
           </CardHeader>
           <CardContent>
             <div className="h-80 flex items-center justify-center">
-              {/* This would be replaced with an actual chart component */}
-              <div className="relative w-full h-64">
-                <div className="absolute bottom-0 left-0 right-0 bg-blue-500 bg-opacity-20 rounded-t-md" style={{ height: '40%' }}>
-                  <div className="absolute bottom-0 left-0 right-0 bg-blue-500 rounded-t-md" style={{ height: '60%' }}></div>
-                </div>
-                <div className="absolute bottom-0 left-[14.28%] right-[85.72%] bg-blue-500 bg-opacity-20 rounded-t-md" style={{ height: '60%' }}>
-                  <div className="absolute bottom-0 left-0 right-0 bg-blue-500 rounded-t-md" style={{ height: '75%' }}></div>
-                </div>
-                <div className="absolute bottom-0 left-[28.56%] right-[71.44%] bg-blue-500 bg-opacity-20 rounded-t-md" style={{ height: '30%' }}>
-                  <div className="absolute bottom-0 left-0 right-0 bg-blue-500 rounded-t-md" style={{ height: '50%' }}></div>
-                </div>
-                <div className="absolute bottom-0 left-[42.84%] right-[57.16%] bg-blue-500 bg-opacity-20 rounded-t-md" style={{ height: '80%' }}>
-                  <div className="absolute bottom-0 left-0 right-0 bg-blue-500 rounded-t-md" style={{ height: '90%' }}></div>
-                </div>
-                <div className="absolute bottom-0 left-[57.12%] right-[42.88%] bg-blue-500 bg-opacity-20 rounded-t-md" style={{ height: '50%' }}>
-                  <div className="absolute bottom-0 left-0 right-0 bg-blue-500 rounded-t-md" style={{ height: '65%' }}></div>
-                </div>
-                <div className="absolute bottom-0 left-[71.4%] right-[28.6%] bg-blue-500 bg-opacity-20 rounded-t-md" style={{ height: '45%' }}>
-                  <div className="absolute bottom-0 left-0 right-0 bg-blue-500 rounded-t-md" style={{ height: '45%' }}></div>
-                </div>
-                <div className="absolute bottom-0 left-[85.68%] right-[14.32%] bg-blue-500 bg-opacity-20 rounded-t-md" style={{ height: '65%' }}>
-                  <div className="absolute bottom-0 left-0 right-0 bg-blue-500 rounded-t-md" style={{ height: '70%' }}></div>
-                </div>
-                <div className="absolute bottom-[-24px] left-0 right-0 flex justify-between text-xs text-gray-500">
-                  <span>Mon</span>
-                  <span>Tue</span>
-                  <span>Wed</span>
-                  <span>Thu</span>
-                  <span>Fri</span>
-                  <span>Sat</span>
-                  <span>Sun</span>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Subject Distribution</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-80 flex flex-col justify-center">
-              {/* This would be replaced with an actual chart component */}
+              {
+}
               <div className="space-y-4">
                 {subjectDistribution.map((item) => (
                   <div key={item.subject} className="space-y-2">

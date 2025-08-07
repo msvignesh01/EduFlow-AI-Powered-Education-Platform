@@ -1,8 +1,8 @@
-// Accessibility utilities and helpers
+
 
 import { useEffect, useState } from 'react';
 
-// Keyboard navigation utilities
+
 export const KEYBOARD_KEYS = {
   ENTER: 'Enter',
   SPACE: ' ',
@@ -16,7 +16,7 @@ export const KEYBOARD_KEYS = {
   END: 'End',
 } as const;
 
-// Focus management
+
 export const focusElement = (element: HTMLElement | null) => {
   if (element) {
     element.focus();
@@ -37,7 +37,7 @@ export const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
   return Array.from(container.querySelectorAll(focusableSelectors));
 };
 
-// Trap focus within a container
+
 export const useFocusTrap = (isActive: boolean, containerRef: React.RefObject<HTMLElement>) => {
   useEffect(() => {
     if (!isActive || !containerRef.current) return;
@@ -50,13 +50,13 @@ export const useFocusTrap = (isActive: boolean, containerRef: React.RefObject<HT
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === KEYBOARD_KEYS.TAB) {
         if (e.shiftKey) {
-          // Shift + Tab
+
           if (document.activeElement === firstElement) {
             e.preventDefault();
             lastElement?.focus();
           }
         } else {
-          // Tab
+
           if (document.activeElement === lastElement) {
             e.preventDefault();
             firstElement?.focus();
@@ -67,7 +67,7 @@ export const useFocusTrap = (isActive: boolean, containerRef: React.RefObject<HT
 
     container.addEventListener('keydown', handleKeyDown);
     
-    // Focus first element when trap becomes active
+
     firstElement?.focus();
 
     return () => {
@@ -76,7 +76,7 @@ export const useFocusTrap = (isActive: boolean, containerRef: React.RefObject<HT
   }, [isActive, containerRef]);
 };
 
-// Announce to screen readers
+
 export const announceToScreenReader = (message: string, priority: 'polite' | 'assertive' = 'polite') => {
   const announcement = document.createElement('div');
   announcement.setAttribute('aria-live', priority);
@@ -86,20 +86,20 @@ export const announceToScreenReader = (message: string, priority: 'polite' | 'as
 
   document.body.appendChild(announcement);
 
-  // Remove after announcement
+
   setTimeout(() => {
     document.body.removeChild(announcement);
   }, 1000);
 };
 
-// Skip link utility function
+
 export const createSkipLinkProps = (href: string) => ({
   href,
   className: "sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:shadow-lg",
   onFocus: () => announceToScreenReader('Skip link focused'),
 });
 
-// Reduced motion detection
+
 export const useReducedMotion = () => {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -118,7 +118,7 @@ export const useReducedMotion = () => {
   return prefersReducedMotion;
 };
 
-// High contrast detection
+
 export const useHighContrast = () => {
   const [prefersHighContrast, setPrefersHighContrast] = useState(false);
 
@@ -137,7 +137,7 @@ export const useHighContrast = () => {
   return prefersHighContrast;
 };
 
-// ARIA attributes helpers
+
 export const getAriaAttributes = (props: {
   label?: string;
   labelledBy?: string;
@@ -182,7 +182,7 @@ export const getAriaAttributes = (props: {
   return ariaProps;
 };
 
-// Keyboard navigation hook
+
 export const useKeyboardNavigation = (
   items: any[],
   onSelect?: (item: any, index: number) => void,
@@ -249,11 +249,11 @@ export const useKeyboardNavigation = (
   };
 };
 
-// Color contrast checker
+
 export const getContrastRatio = (color1: string, color2: string): number => {
-  // This is a simplified version - in production, you'd want a more robust implementation
+
   const getLuminance = (color: string): number => {
-    // Convert hex to RGB and calculate luminance
+
     const hex = color.replace('#', '');
     const r = parseInt(hex.substr(0, 2), 16) / 255;
     const g = parseInt(hex.substr(2, 2), 16) / 255;
@@ -279,8 +279,8 @@ export const meetsWCAGContrast = (color1: string, color2: string, level: 'AA' | 
   return level === 'AA' ? ratio >= 4.5 : ratio >= 7;
 };
 
-// Screen reader only class
+
 export const srOnlyClass = 'absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0';
 
-// Import React for hooks
+
 import React from 'react';

@@ -1,4 +1,4 @@
-// React Hook for Hybrid AI Service
+
 import { useState, useEffect, useCallback } from 'react';
 import { hybridAI, AIResponse, NetworkStatus, AIModel, AIProvider } from '../lib/hybridAIService';
 
@@ -10,22 +10,22 @@ export interface UseHybridAIOptions {
 }
 
 export interface UseHybridAIReturn {
-  // State
+
   isLoading: boolean;
   error: string | null;
   response: AIResponse | null;
   networkStatus: NetworkStatus;
   
-  // Actions
+
   generateContent: (prompt: string) => Promise<AIResponse>;
   generateStream: (prompt: string) => AsyncGenerator<string, void, unknown>;
   clearResponse: () => void;
   refreshStatus: () => Promise<NetworkStatus>;
   
-  // Configuration
+
   updateConfig: (config: any) => void;
   
-  // Convenience
+
   isOnline: boolean;
   hasAnyAI: boolean;
   bestAvailableModel: string;
@@ -43,11 +43,11 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
     lastChecked: 0
   });
 
-  // Initialize and setup
+
   useEffect(() => {
     const initializeAI = async () => {
       try {
-        // Apply user preferences
+
         if (options.preferredModel || options.preferredProvider) {
           hybridAI.updateConfig({
             preferredModel: options.preferredModel || 'auto',
@@ -55,7 +55,7 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
           });
         }
 
-        // Initial status check
+
         const status = await hybridAI.forceHealthCheck();
         setNetworkStatus(status);
       } catch (err) {
@@ -66,7 +66,7 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
 
     initializeAI();
 
-    // Auto health check if enabled
+
     let interval: NodeJS.Timeout | null = null;
     if (options.autoHealthCheck !== false) {
       interval = setInterval(async () => {
@@ -76,7 +76,7 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
         } catch (err) {
           console.warn('Auto health check failed:', err);
         }
-      }, 30000); // Check every 30 seconds
+      }, 30000);
     }
 
     return () => {
@@ -84,7 +84,7 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
     };
   }, [options.preferredModel, options.preferredProvider, options.autoHealthCheck]);
 
-  // Generate content
+
   const generateContent = useCallback(async (prompt: string, forceMode: boolean = false): Promise<AIResponse> => {
     if (!prompt.trim()) {
       throw new Error('Prompt cannot be empty');
@@ -97,7 +97,7 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
       const result = await hybridAI.generateContent(prompt, {}, forceMode);
       setResponse(result);
       
-      // Update network status after successful call
+
       const status = hybridAI.getStatus();
       setNetworkStatus(status);
       
@@ -106,7 +106,7 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
       const errorMessage = err instanceof Error ? err.message : 'AI generation failed';
       console.error('🚨 AI Generation Error:', errorMessage);
       
-      // Try with force mode if regular mode failed
+
       if (!forceMode && errorMessage.includes('No AI services available')) {
         console.warn('⚠️ Retrying with force mode...');
         try {
@@ -125,7 +125,7 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
     }
   }, []);
 
-  // Generate streaming content
+
   const generateStream = useCallback(async function* (prompt: string): AsyncGenerator<string, void, unknown> {
     if (!prompt.trim()) {
       throw new Error('Prompt cannot be empty');
@@ -148,13 +148,13 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
     }
   }, []);
 
-  // Clear current response
+
   const clearResponse = useCallback(() => {
     setResponse(null);
     setError(null);
   }, []);
 
-  // Refresh network status
+
   const refreshStatus = useCallback(async (): Promise<NetworkStatus> => {
     try {
       const status = await hybridAI.forceHealthCheck();
@@ -166,12 +166,12 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
     }
   }, []);
 
-  // Update AI configuration
+
   const updateConfig = useCallback((config: any) => {
     hybridAI.updateConfig(config);
   }, []);
 
-  // Computed values
+
   const isOnline = networkStatus.isOnline;
   const hasAnyAI = networkStatus.isGeminiAvailable || 
                    networkStatus.isGemmaAPIAvailable || 
@@ -183,29 +183,29 @@ export const useHybridAI = (options: UseHybridAIOptions = {}): UseHybridAIReturn
                             'None Available';
 
   return {
-    // State
+
     isLoading,
     error,
     response,
     networkStatus,
     
-    // Actions
+
     generateContent,
     generateStream,
     clearResponse,
     refreshStatus,
     
-    // Configuration
+
     updateConfig,
     
-    // Convenience
+
     isOnline,
     hasAnyAI,
     bestAvailableModel
   };
 };
 
-// Convenience hooks for specific models
+
 export const useGemini = () => useHybridAI({ 
   preferredModel: 'gemini-2.0-flash',
   preferredProvider: 'google-gemini' 

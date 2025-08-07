@@ -1,4 +1,4 @@
-// Enhanced Hybrid AI Chat Component
+
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -54,12 +54,12 @@ export const HybridAIChat = ({
     bestAvailableModel
   } = useHybridAI({ autoHealthCheck: true });
 
-  // Auto scroll to bottom
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, streamingContent]);
 
-  // Focus input on mount
+
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -83,12 +83,12 @@ export const HybridAIChat = ({
     const userMessage = inputValue.trim();
     setInputValue('');
     
-    // Add user message
+
     addMessage(userMessage, true);
 
     try {
       if (enableStreaming) {
-        // Streaming response
+
         setStreamingContent('');
         const generator = generateStream(userMessage);
         let fullContent = '';
@@ -100,11 +100,11 @@ export const HybridAIChat = ({
         
         setStreamingContent('');
         
-        // Add final AI message (we'll need to get the response metadata)
+
         const response = await generateContent(userMessage);
         addMessage(fullContent || response.content, false, response);
       } else {
-        // Regular response
+
         const response = await generateContent(userMessage);
         addMessage(response.content, false, response);
       }
@@ -159,14 +159,8 @@ export const HybridAIChat = ({
 
   return (
     <div className={`flex flex-col h-full bg-white/5 dark:bg-black/5 rounded-xl border border-white/20 dark:border-white/10 ${className}`}>
-      {/* Header with Status */}
-      {showStatus && (
-        <div className="p-4 border-b border-white/10">
-          <AIServiceStatus variant="compact" />
-        </div>
-      )}
-
-      {/* Messages */}
+      {
+}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         <AnimatePresence>
           {messages.map((message) => (
@@ -201,29 +195,8 @@ export const HybridAIChat = ({
           ))}
         </AnimatePresence>
 
-        {/* Streaming Message */}
-        {streamingContent && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex justify-start"
-          >
-            <div className="max-w-[80%] rounded-xl p-3 bg-white/10 dark:bg-black/10 backdrop-blur-md">
-              <div className="flex items-start space-x-2">
-                <Bot className="w-4 h-4 mt-1" />
-                <div className="flex-1">
-                  <p className="text-sm whitespace-pre-wrap">{streamingContent}</p>
-                  <div className="flex items-center space-x-1 mt-1">
-                    <RefreshCw className="w-3 h-3 animate-spin" />
-                    <span className="text-xs text-gray-500">Generating...</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Loading Indicator */}
+        {
+}
         {isLoading && !streamingContent && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -244,14 +217,8 @@ export const HybridAIChat = ({
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Error Display */}
-      {error && (
-        <div className="mx-4 mb-2 p-3 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg text-sm">
-          {error}
-        </div>
-      )}
-
-      {/* Input */}
+      {
+}
       <form onSubmit={handleSubmit} className="p-4 border-t border-white/10">
         <div className="flex items-center space-x-2">
           <div className="flex-1 relative">
@@ -265,30 +232,8 @@ export const HybridAIChat = ({
               className="w-full px-4 py-3 bg-white/10 dark:bg-black/10 border border-white/20 dark:border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/50 disabled:opacity-50"
             />
             
-            {/* Connection Status Indicator */}
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-              {isOnline ? (
-                <Wifi className="w-4 h-4 text-green-500" />
-              ) : (
-                <WifiOff className="w-4 h-4 text-red-500" />
-              )}
-            </div>
-          </div>
-          
-          <button
-            type="submit"
-            disabled={isLoading || !inputValue.trim() || !hasAnyAI}
-            className="px-4 py-3 bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-xl transition-colors"
-          >
-            {isLoading ? (
-              <RefreshCw className="w-4 h-4 animate-spin" />
-            ) : (
-              <Send className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-        
-        {/* Status Bar */}
+            {
+}
         <div className="flex items-center justify-between mt-2 text-xs text-gray-600 dark:text-gray-400">
           <span>
             {hasAnyAI ? `Ready with ${bestAvailableModel}` : 'No AI available'}

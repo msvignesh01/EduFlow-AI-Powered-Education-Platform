@@ -1,4 +1,4 @@
-// Ollama Service for Gemma 3 12B Local AI Model
+
 interface OllamaResponse {
   model: string;
   created_at: string;
@@ -31,12 +31,12 @@ class OllamaService {
   private isAvailable: boolean = false;
 
   constructor() {
-    this.baseUrl = import.meta.env.VITE_OLLAMA_ENDPOINT || 'http://localhost:11434';
+    this.baseUrl = import.meta.env.VITE_OLLAMA_ENDPOINT || 'http:
     this.model = import.meta.env.VITE_OLLAMA_MODEL || 'gemma2:27b';
     this.checkAvailability();
   }
 
-  // Check if Ollama server is available
+
   async checkAvailability(): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseUrl}/api/tags`, {
@@ -50,7 +50,7 @@ class OllamaService {
         const data = await response.json();
         this.isAvailable = true;
         
-        // Check if our model is available
+
         const modelExists = data.models?.some((m: any) => m.name === this.model);
         if (!modelExists) {
           console.warn(`⚠️ Model ${this.model} not found. Available models:`, data.models?.map((m: any) => m.name));
@@ -69,7 +69,7 @@ class OllamaService {
     }
   }
 
-  // Get available models
+
   async getModels(): Promise<string[]> {
     try {
       const response = await fetch(`${this.baseUrl}/api/tags`);
@@ -84,7 +84,7 @@ class OllamaService {
     }
   }
 
-  // Generate response (non-streaming)
+
   async generateResponse(prompt: string, context?: number[]): Promise<string> {
     if (!this.isAvailable) {
       await this.checkAvailability();
@@ -126,7 +126,7 @@ class OllamaService {
     }
   }
 
-  // Generate streaming response
+
   async generateStreamingResponse(
     prompt: string, 
     onChunk: (chunk: string) => void,
@@ -196,14 +196,14 @@ class OllamaService {
     }
   }
 
-  // Chat with conversation context
+
   async chat(messages: ChatMessage[]): Promise<string> {
-    // Convert messages to a single prompt for Gemma
+
     const conversationPrompt = this.formatChatPrompt(messages);
     return await this.generateResponse(conversationPrompt);
   }
 
-  // Chat with streaming
+
   async chatStream(
     messages: ChatMessage[], 
     onChunk: (chunk: string) => void
@@ -212,7 +212,7 @@ class OllamaService {
     await this.generateStreamingResponse(conversationPrompt, onChunk);
   }
 
-  // Format chat messages into a prompt
+
   private formatChatPrompt(messages: ChatMessage[]): string {
     let prompt = '';
     
@@ -230,12 +230,12 @@ class OllamaService {
       }
     }
     
-    // Add final prompt for assistant response
+
     prompt += 'Assistant: ';
     return prompt;
   }
 
-  // Educational content generation
+
   async generateQuiz(topic: string, difficulty: 'easy' | 'medium' | 'hard' = 'medium'): Promise<any> {
     const prompt = `Generate a ${difficulty} level quiz about ${topic}. 
 Format as JSON with this structure:
@@ -255,7 +255,7 @@ Generate 5 questions. Be educational and accurate.`;
 
     try {
       const response = await this.generateResponse(prompt);
-      // Try to extract JSON from response
+
       const jsonMatch = response.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         return JSON.parse(jsonMatch[0]);
@@ -267,7 +267,7 @@ Generate 5 questions. Be educational and accurate.`;
     }
   }
 
-  // Study material summarization
+
   async summarizeText(text: string, length: 'short' | 'medium' | 'long' = 'medium'): Promise<string> {
     const lengthInstructions = {
       short: 'in 2-3 sentences',
@@ -284,7 +284,7 @@ Summary:`;
     return await this.generateResponse(prompt);
   }
 
-  // Educational explanation
+
   async explainConcept(concept: string, level: 'beginner' | 'intermediate' | 'advanced' = 'intermediate'): Promise<string> {
     const prompt = `Explain the concept of "${concept}" at a ${level} level. 
 Provide a clear, educational explanation with examples if helpful. 
@@ -295,7 +295,7 @@ Explanation:`;
     return await this.generateResponse(prompt);
   }
 
-  // Pull/download a model
+
   async pullModel(modelName: string, onProgress?: (progress: string) => void): Promise<void> {
     try {
       const response = await fetch(`${this.baseUrl}/api/pull`, {
@@ -342,7 +342,7 @@ Explanation:`;
     }
   }
 
-  // Get server info
+
   async getServerInfo(): Promise<any> {
     try {
       const response = await fetch(`${this.baseUrl}/api/version`);
@@ -356,17 +356,17 @@ Explanation:`;
     }
   }
 
-  // Health check
+
   get isServerAvailable(): boolean {
     return this.isAvailable;
   }
 
-  // Get current model
+
   get currentModel(): string {
     return this.model;
   }
 
-  // Set model
+
   setModel(modelName: string): void {
     this.model = modelName;
   }

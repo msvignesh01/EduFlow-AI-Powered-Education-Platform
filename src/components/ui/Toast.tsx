@@ -2,7 +2,7 @@
 import { Toaster, toast } from 'react-hot-toast';
 import { CheckCircle, XCircle, AlertCircle, Info } from 'lucide-react';
 
-// Custom toast components
+
 const SuccessToast = ({ message }: { message: string }) => (
   <div className="flex items-center space-x-2">
     <CheckCircle className="h-5 w-5 text-green-500" />
@@ -31,7 +31,7 @@ const InfoToast = ({ message }: { message: string }) => (
   </div>
 );
 
-// Toast utility functions
+
 export const showToast = {
   success: (message: string) => {
     toast.custom(<SuccessToast message={message} />, {
@@ -86,7 +86,7 @@ export const showToast = {
   },
 };
 
-// Toast container component
+
 export const ToastContainer: React.FC = () => {
   return (
     <Toaster

@@ -99,19 +99,19 @@ class Logger {
     
     console.error(this.formatMessage(entry), error, context);
     
-    // In production, you might want to send errors to a service
+
     if (!isDevelopment) {
       this.sendToErrorService(entry);
     }
   }
 
   private sendToErrorService(entry: LogEntry): void {
-    // Implement error reporting service integration here
-    // e.g., Sentry, LogRocket, etc.
+
+
     console.log('Would send to error service:', entry);
   }
 
-  // Performance logging
+
   time(label: string): void {
     if (isDevelopment) {
       console.time(label);
@@ -124,26 +124,26 @@ class Logger {
     }
   }
 
-  // Get recent logs for debugging
+
   getRecentLogs(count = 50): LogEntry[] {
     return this.logs.slice(-count);
   }
 
-  // Clear logs
+
   clearLogs(): void {
     this.logs = [];
   }
 
-  // Export logs for debugging
+
   exportLogs(): string {
     return this.logs.map(entry => this.formatMessage(entry)).join('\n');
   }
 }
 
-// Create singleton instance
+
 export const logger = new Logger();
 
-// Convenience functions
+
 export const log = {
   debug: (message: string, context?: Record<string, any>) => logger.debug(message, context),
   info: (message: string, context?: Record<string, any>) => logger.info(message, context),
@@ -153,7 +153,7 @@ export const log = {
   timeEnd: (label: string) => logger.timeEnd(label),
 };
 
-// Global error handler
+
 window.addEventListener('error', (event) => {
   logger.error('Uncaught error', event.error, {
     filename: event.filename,

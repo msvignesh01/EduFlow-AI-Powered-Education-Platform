@@ -18,7 +18,7 @@ import {
 import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 
-// Types
+
 export interface UserProfile {
   uid: string;
   email: string;
@@ -58,20 +58,20 @@ class AuthService {
     });
   }
 
-  // Email & Password Authentication
+
   async signUpWithEmail(email: string, password: string, displayName: string): Promise<UserCredential> {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
-      // Update profile with display name
+
       await updateProfile(userCredential.user, {
         displayName: displayName
       });
 
-      // Send email verification
+
       await sendEmailVerification(userCredential.user);
 
-      // Create user profile in Firestore
+
       await this.createUserProfile(userCredential.user, 'email');
 
       return userCredential;
@@ -84,7 +84,7 @@ class AuthService {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       
-      // Update last login time
+
       await this.updateLastLogin(userCredential.user.uid);
       
       return userCredential;
@@ -93,19 +93,19 @@ class AuthService {
     }
   }
 
-  // Google Authentication
+
   async signInWithGoogle(): Promise<UserCredential> {
     try {
       const userCredential = await signInWithPopup(auth, this.googleProvider);
       
-      // Check if this is a new user
+
       const userDoc = await getDoc(doc(db, 'users', userCredential.user.uid));
       
       if (!userDoc.exists()) {
-        // Create new user profile
+
         await this.createUserProfile(userCredential.user, 'google');
       } else {
-        // Update last login time
+
         await this.updateLastLogin(userCredential.user.uid);
       }
       
@@ -115,7 +115,7 @@ class AuthService {
     }
   }
 
-  // Create user profile in Firestore
+
   private async createUserProfile(user: User, provider: 'email' | 'google'): Promise<void> {
     const userProfile: UserProfile = {
       uid: user.uid,
@@ -142,14 +142,14 @@ class AuthService {
     await setDoc(doc(db, 'users', user.uid), userProfile);
   }
 
-  // Update last login time
+
   private async updateLastLogin(uid: string): Promise<void> {
     await updateDoc(doc(db, 'users', uid), {
       lastLoginAt: serverTimestamp()
     });
   }
 
-  // Get user profile from Firestore
+
   async getUserProfile(uid: string): Promise<UserProfile | null> {
     try {
       const userDoc = await getDoc(doc(db, 'users', uid));
@@ -163,12 +163,12 @@ class AuthService {
     }
   }
 
-  // Update user profile
+
   async updateUserProfile(uid: string, updates: Partial<UserProfile>): Promise<void> {
     await updateDoc(doc(db, 'users', uid), updates);
   }
 
-  // Password reset
+
   async resetPassword(email: string): Promise<void> {
     try {
       await sendPasswordResetEmail(auth, email);
@@ -177,32 +177,32 @@ class AuthService {
     }
   }
 
-  // Update password
+
   async updateUserPassword(currentPassword: string, newPassword: string): Promise<void> {
     if (!auth.currentUser || !auth.currentUser.email) {
       throw new Error('No authenticated user');
     }
 
     try {
-      // Re-authenticate user
+
       const credential = EmailAuthProvider.credential(auth.currentUser.email, currentPassword);
       await reauthenticateWithCredential(auth.currentUser, credential);
       
-      // Update password
+
       await updatePassword(auth.currentUser, newPassword);
     } catch (error: any) {
       throw this.handleAuthError(error);
     }
   }
 
-  // Delete account
+
   async deleteAccount(password?: string): Promise<void> {
     if (!auth.currentUser) {
       throw new Error('No authenticated user');
     }
 
     try {
-      // Re-authenticate if password provided (for email users)
+
       if (password && auth.currentUser.email) {
         const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
         await reauthenticateWithCredential(auth.currentUser, credential);
@@ -210,43 +210,43 @@ class AuthService {
 
       const uid = auth.currentUser.uid;
       
-      // Delete user data from Firestore
-      // Note: In production, use Cloud Functions for complete cleanup
+
+
       await updateDoc(doc(db, 'users', uid), {
         deletedAt: serverTimestamp(),
         active: false
       });
 
-      // Delete user account
+
       await deleteUser(auth.currentUser);
     } catch (error: any) {
       throw this.handleAuthError(error);
     }
   }
 
-  // Sign out
+
   async signOut(): Promise<void> {
     await signOut(auth);
   }
 
-  // Auth state observer
+
   onAuthStateChange(callback: (user: User | null) => void): () => void {
     return onAuthStateChanged(auth, callback);
   }
 
-  // Get current user
+
   getCurrentUser(): User | null {
     return auth.currentUser;
   }
 
-  // Resend email verification
+
   async resendEmailVerification(): Promise<void> {
     if (auth.currentUser) {
       await sendEmailVerification(auth.currentUser);
     }
   }
 
-  // Error handling
+
   private handleAuthError(error: any): AuthError {
     let message = 'An error occurred during authentication';
 

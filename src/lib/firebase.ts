@@ -1,4 +1,4 @@
-// Enhanced Firebase configuration for Premium SaaS Platform
+
 import { initializeApp } from "firebase/app";
 import { getAuth, connectAuthEmulator } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator, enableNetwork, disableNetwork } from "firebase/firestore";
@@ -8,7 +8,7 @@ import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 import { getRemoteConfig } from "firebase/remote-config";
 import { getPerformance } from "firebase/performance";
 
-// Premium Firebase configuration with all services
+
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -19,10 +19,10 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-// Initialize Firebase app
+
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase services
+
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
@@ -31,7 +31,7 @@ export const functions = getFunctions(app);
 export const remoteConfig = getRemoteConfig(app);
 export const performance = typeof window !== 'undefined' ? getPerformance(app) : null;
 
-// Enhanced offline support
+
 export const enableOfflineMode = async () => {
   try {
     await disableNetwork(db);
@@ -50,7 +50,7 @@ export const enableOnlineMode = async () => {
   }
 };
 
-// Connection state management
+
 export const monitorConnection = (callback: (isOnline: boolean) => void) => {
   const handleOnline = () => {
     enableOnlineMode();
@@ -65,22 +65,22 @@ export const monitorConnection = (callback: (isOnline: boolean) => void) => {
   window.addEventListener('online', handleOnline);
   window.addEventListener('offline', handleOffline);
   
-  // Initial state
+
   callback(navigator.onLine);
   
-  // Cleanup function
+
   return () => {
     window.removeEventListener('online', handleOnline);
     window.removeEventListener('offline', handleOffline);
   };
 };
 
-// Development emulators (only in development)
+
 if (import.meta.env.DEV && typeof window !== 'undefined') {
   const hostname = window.location.hostname;
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     try {
-      connectAuthEmulator(auth, 'http://localhost:9099');
+      connectAuthEmulator(auth, 'http:
       connectFirestoreEmulator(db, 'localhost', 8080);
       connectStorageEmulator(storage, 'localhost', 9199);
       connectFunctionsEmulator(functions, 'localhost', 5001);

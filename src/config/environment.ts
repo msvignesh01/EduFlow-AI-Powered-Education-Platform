@@ -16,7 +16,7 @@ const getEnvironmentConfig = (): EnvironmentConfig => {
   const env = import.meta.env;
   
   return {
-    API_URL: env.VITE_API_URL || 'http://localhost:8000',
+    API_URL: env.VITE_API_URL || 'http:
     GEMINI_API_KEY: env.VITE_GEMINI_API_KEY || '',
     FIREBASE_API_KEY: env.VITE_FIREBASE_API_KEY || '',
     FIREBASE_AUTH_DOMAIN: env.VITE_FIREBASE_AUTH_DOMAIN || '',
@@ -32,12 +32,12 @@ const getEnvironmentConfig = (): EnvironmentConfig => {
 
 export const config = getEnvironmentConfig();
 
-// Environment checks
+
 export const isDevelopment = config.ENVIRONMENT === 'development';
 export const isProduction = config.ENVIRONMENT === 'production';
 export const isStaging = config.ENVIRONMENT === 'staging';
 
-// Validation
+
 export const validateConfig = (): string[] => {
   const errors: string[] = [];
   
@@ -58,7 +58,7 @@ export const validateConfig = (): string[] => {
   return errors;
 };
 
-// Log configuration in development
+
 if (isDevelopment) {
   console.log('Environment Configuration:', config);
   

@@ -1,7 +1,7 @@
 
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 
-// Premium animation variants
+
 export const fadeInUp: Variants = {
   initial: {
     opacity: 0,
@@ -172,7 +172,7 @@ export const staggerItem: Variants = {
   },
 };
 
-// Premium hover animations
+
 export const hoverLift: Variants = {
   initial: {
     y: 0,
@@ -207,7 +207,7 @@ export const hoverGlow: Variants = {
   },
 };
 
-// Page transition variants
+
 export const pageTransition: Variants = {
   initial: {
     opacity: 0,
@@ -230,7 +230,7 @@ export const pageTransition: Variants = {
   },
 };
 
-// Motion wrapper components
+
 interface MotionWrapperProps {
   children: React.ReactNode;
   variants?: Variants;
@@ -331,7 +331,7 @@ export const HoverLift: React.FC<MotionWrapperProps> = ({
   </motion.div>
 );
 
-// Page transition wrapper
+
 export const PageTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <AnimatePresence mode="wait">
     <motion.div

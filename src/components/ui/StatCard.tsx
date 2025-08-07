@@ -20,7 +20,7 @@ export const StatCard: React.FC<StatCardProps> = ({ data, className = '' }) => {
     enableHaptic: false,
     onInteraction: (type) => {
       if (type === 'hover') {
-        // Optional: Add analytics tracking
+
       }
     },
   });

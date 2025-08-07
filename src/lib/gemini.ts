@@ -1,7 +1,7 @@
-// Legacy Gemini service - now uses the enhanced AI service
+
 import { aiService } from './aiService';
 
-// Backward compatibility function
+
 export const generateContent = async (prompt: string): Promise<string> => {
   try {
     const response = await aiService.generateContent(prompt, {
@@ -16,7 +16,7 @@ export const generateContent = async (prompt: string): Promise<string> => {
   }
 };
 
-// Enhanced function with offline fallback
+
 export const generateContentWithFallback = async (prompt: string): Promise<{
   content: string;
   model: string;
@@ -38,5 +38,5 @@ export const generateContentWithFallback = async (prompt: string): Promise<{
   }
 };
 
-// Export the AI service for advanced usage
+
 export { aiService } from './aiService';

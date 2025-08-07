@@ -72,7 +72,7 @@ export function useApi<T>(
   };
 }
 
-// Specific hooks for common API operations
+
 export const useContentGeneration = () => {
   return useApi(
     (text: string, outputType: string) => apiClient.generateContent(text, outputType),

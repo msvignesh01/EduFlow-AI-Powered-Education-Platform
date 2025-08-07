@@ -5,7 +5,7 @@ import { Card, CardContent } from '../ui/Card';
 import { Quiz, Question } from '../../types';
 import { studyService } from '../../services/studyService';
 
-// Mock quiz data
+
 const mockQuizData: Quiz = {
   id: "quiz-1",
   userId: "user-1",
@@ -52,7 +52,7 @@ const QuizComponent: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [answers, setAnswers] = useState<number[]>([]);
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const [timer, setTimer] = useState(60); // 60 seconds per question
+  const [timer, setTimer] = useState(60);
   const [quizStarted, setQuizStarted] = useState(false);
   
   const startQuiz = () => {
@@ -73,11 +73,11 @@ const QuizComponent: React.FC = () => {
       if (currentQuestionIndex < (currentQuizData?.questions.length || 0) - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setSelectedOption(null);
-        setTimer(60); // Reset timer for the next question
+        setTimer(60);
       } else {
         setHasSubmitted(true);
         
-        // Track quiz completion
+
         try {
           const score = calculateScore();
           const percentage = getScorePercentage();
@@ -126,7 +126,7 @@ const QuizComponent: React.FC = () => {
     return <XCircle size={48} className="text-red-600 dark:text-red-400" />;
   };
   
-  // Display quiz introduction if not started
+
   if (!quizStarted) {
     return (
       <div className="space-y-6">
@@ -165,7 +165,7 @@ const QuizComponent: React.FC = () => {
     );
   }
   
-  // Display results after quiz completion
+
   if (hasSubmitted) {
     const score = calculateScore();
     const percentage = getScorePercentage();
@@ -244,7 +244,7 @@ const QuizComponent: React.FC = () => {
     );
   }
   
-  // Display current question
+
   const currentQuestion = currentQuizData?.questions[currentQuestionIndex];
   
   return (

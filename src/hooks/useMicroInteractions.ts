@@ -38,7 +38,7 @@ export const useMicroInteractions = (options: UseMicroInteractionsOptions = {}) 
   const audioContextRef = useRef<AudioContext | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout>();
 
-  // Initialize audio context for sound feedback
+
   useEffect(() => {
     if (enableSound && !prefersReducedMotion) {
       try {
@@ -49,7 +49,7 @@ export const useMicroInteractions = (options: UseMicroInteractionsOptions = {}) 
     }
   }, [enableSound, prefersReducedMotion]);
 
-  // Haptic feedback
+
   const triggerHaptic = useCallback((intensity: 'light' | 'medium' | 'heavy' = 'light') => {
     if (!enableHaptic || prefersReducedMotion) return;
 
@@ -63,7 +63,7 @@ export const useMicroInteractions = (options: UseMicroInteractionsOptions = {}) 
     }
   }, [enableHaptic, prefersReducedMotion]);
 
-  // Sound feedback
+
   const triggerSound = useCallback((frequency: number = 800, duration: number = 100) => {
     if (!enableSound || prefersReducedMotion || !audioContextRef.current) return;
 
@@ -87,7 +87,7 @@ export const useMicroInteractions = (options: UseMicroInteractionsOptions = {}) 
     }
   }, [enableSound, prefersReducedMotion]);
 
-  // Ripple effect
+
   const createRipple = useCallback((event: React.MouseEvent | React.TouchEvent) => {
     if (!enableRipple || prefersReducedMotion) return;
 
@@ -112,7 +112,7 @@ export const useMicroInteractions = (options: UseMicroInteractionsOptions = {}) 
     }, rippleDuration);
   }, [enableRipple, prefersReducedMotion, rippleDuration]);
 
-  // Event handlers
+
   const handleMouseEnter = useCallback(() => {
     setState(prev => ({ ...prev, isHovered: true }));
     onInteraction?.('hover');
@@ -138,7 +138,7 @@ export const useMicroInteractions = (options: UseMicroInteractionsOptions = {}) 
   const handleMouseUp = useCallback(() => {
     setState(prev => ({ ...prev, isPressed: false }));
     
-    // Keep active state briefly for visual feedback
+
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = setTimeout(() => {
       setState(prev => ({ ...prev, isActive: false }));
@@ -160,7 +160,7 @@ export const useMicroInteractions = (options: UseMicroInteractionsOptions = {}) 
     onInteraction?.('click');
   }, [triggerHaptic, triggerSound, onInteraction]);
 
-  // Touch handlers for mobile
+
   const handleTouchStart = useCallback((event: React.TouchEvent) => {
     setState(prev => ({ ...prev, isPressed: true, isActive: true, isHovered: true }));
     createRipple(event);
@@ -177,7 +177,7 @@ export const useMicroInteractions = (options: UseMicroInteractionsOptions = {}) 
     }, 150);
   }, []);
 
-  // Cleanup
+
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -210,7 +210,7 @@ export const useMicroInteractions = (options: UseMicroInteractionsOptions = {}) 
   };
 };
 
-// Hook for form field micro-interactions
+
 export const useFormFieldInteractions = () => {
   const [state, setState] = useState({
     isFocused: false,
@@ -257,7 +257,7 @@ export const useFormFieldInteractions = () => {
   };
 };
 
-// Hook for loading state micro-interactions
+
 export const useLoadingInteractions = (isLoading: boolean) => {
   const [progress, setProgress] = useState(0);
   const [stage, setStage] = useState('');
@@ -270,7 +270,7 @@ export const useLoadingInteractions = (isLoading: boolean) => {
         setProgress(prev => {
           const newProgress = prev + Math.random() * 10 + 5;
           
-          // Update stage based on progress
+
           if (newProgress < 30) {
             setStage('Initializing...');
           } else if (newProgress < 60) {
@@ -308,7 +308,7 @@ export const useLoadingInteractions = (isLoading: boolean) => {
   };
 };
 
-// Hook for scroll-based micro-interactions
+
 export const useScrollInteractions = () => {
   const [scrollState, setScrollState] = useState({
     scrollY: 0,
@@ -338,7 +338,7 @@ export const useScrollInteractions = () => {
 
       lastScrollY.current = currentScrollY;
 
-      // Clear scrolling state after scroll ends
+
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
       }

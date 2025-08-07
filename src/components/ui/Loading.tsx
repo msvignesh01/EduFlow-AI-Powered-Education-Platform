@@ -48,7 +48,7 @@ export const Loading: React.FC<LoadingProps> = ({
   return content;
 };
 
-// Skeleton loading components
+
 export const SkeletonCard: React.FC<{ className?: string }> = ({ className = '' }) => (
   <div className={`animate-pulse bg-gray-200 dark:bg-gray-700 rounded-lg ${className}`}>
     <div className="p-6 space-y-4">
@@ -81,7 +81,7 @@ export const SkeletonButton: React.FC<{ className?: string }> = ({ className = '
   <div className={`animate-pulse h-10 bg-gray-300 dark:bg-gray-600 rounded-lg ${className}`} />
 );
 
-// Loading overlay for existing content
+
 export const LoadingOverlay: React.FC<{ isLoading: boolean; children: React.ReactNode }> = ({
   isLoading,
   children

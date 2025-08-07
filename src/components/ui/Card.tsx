@@ -9,8 +9,8 @@ interface CardProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
   variant?: 'default' | 'glass' | 'gradient' | 'elevated' | 'outlined';
   hover?: boolean;
   glow?: boolean;
-  hasShadow?: boolean; // For backward compatibility
-  border?: boolean; // For backward compatibility
+  hasShadow?: boolean;
+  border?: boolean;
 }
 
 export const Card: React.FC<CardProps> = ({
@@ -32,7 +32,7 @@ export const Card: React.FC<CardProps> = ({
     xl: 'p-10',
   };
 
-  // Handle legacy props
+
   const effectiveVariant = border ? 'outlined' : variant;
 
   const variantClasses = {
@@ -183,7 +183,7 @@ export const CardFooter: React.FC<CardFooterProps> = ({
   );
 };
 
-// Add these type exports for compatibility
+
 export const CardTitle = CardHeader;
 export const CardDescription = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
   <p className={`text-sm text-gray-600 dark:text-gray-400 ${className}`}>{children}</p>

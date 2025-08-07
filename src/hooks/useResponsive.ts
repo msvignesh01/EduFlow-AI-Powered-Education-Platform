@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-// Desktop-focused breakpoint definitions for premium SaaS
+
 export const breakpoints = {
   lg: 1024,
   xl: 1280,
@@ -71,7 +71,7 @@ export const useResponsive = (): ResponsiveState => {
       });
     };
 
-    // Use passive listeners for better performance
+
     window.addEventListener('resize', handleResize, { passive: true });
 
     return () => {
@@ -90,13 +90,13 @@ const getCurrentBreakpoint = (width: number): Breakpoint => {
   return 'lg';
 };
 
-// Hook for specific breakpoint checks
+
 export const useBreakpoint = (breakpoint: Breakpoint): boolean => {
   const { width } = useResponsive();
   return width >= breakpoints[breakpoint];
 };
 
-// Hook for media queries
+
 export const useMediaQuery = (query: string): boolean => {
   const [matches, setMatches] = useState(false);
 
@@ -117,7 +117,7 @@ export const useMediaQuery = (query: string): boolean => {
   return matches;
 };
 
-// Responsive value hook - returns different values based on breakpoint
+
 export const useResponsiveValue = <T>(values: {
   xs?: T;
   sm?: T;
@@ -128,7 +128,7 @@ export const useResponsiveValue = <T>(values: {
 }): T | undefined => {
   const { currentBreakpoint } = useResponsive();
   
-  // Return the value for current breakpoint or fall back to smaller ones
+
   if (currentBreakpoint === '2xl' && values['2xl']) return values['2xl'];
   if ((currentBreakpoint === '2xl' || currentBreakpoint === 'xl') && values.xl) return values.xl;
   if ((currentBreakpoint === '2xl' || currentBreakpoint === 'xl' || currentBreakpoint === 'lg') && values.lg) return values.lg;
@@ -137,7 +137,7 @@ export const useResponsiveValue = <T>(values: {
   return values.xs;
 };
 
-// Desktop-focused responsive columns hook
+
 export const useResponsiveColumns = (
   laptop: number = 2,
   desktop: number = 3,
@@ -153,4 +153,3 @@ export const useResponsiveColumns = (
   return laptop;
 };
 
-// Removed touch device detection - desktop-only platform

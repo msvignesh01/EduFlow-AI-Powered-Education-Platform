@@ -15,7 +15,7 @@ import { db, auth } from '../lib/firebase';
 
 export interface StudySessionData {
   userId: string;
-  duration: number; // in minutes
+  duration: number;
   subject: string;
   score?: number;
   completedAt: Timestamp;
@@ -33,7 +33,7 @@ export interface UserStudyStats {
 }
 
 class StudyService {
-  // Save a study session
+
   async saveStudySession(session: Omit<StudySessionData, 'userId' | 'completedAt'>) {
     if (!auth.currentUser) return;
     
@@ -46,11 +46,11 @@ class StudyService {
     const sessionId = `session_${Date.now()}`;
     await setDoc(doc(db, 'studySessions', sessionId), sessionData);
     
-    // Update user stats
+
     await this.updateUserStats();
   }
 
-  // Get user's study stats
+
   async getUserStats(): Promise<UserStudyStats> {
     if (!auth.currentUser) {
       return {
@@ -69,7 +69,7 @@ class StudyService {
       return statsDoc.data() as UserStudyStats;
     }
     
-    // Return default stats if no data exists
+
     return {
       totalSessions: 0,
       totalHours: 0,
@@ -80,7 +80,7 @@ class StudyService {
     };
   }
 
-  // Update user stats
+
   async updateUserStats() {
     if (!auth.currentUser) return;
     
@@ -93,7 +93,7 @@ class StudyService {
     const sessionsSnapshot = await getDocs(sessionsQuery);
     const sessions = sessionsSnapshot.docs.map(doc => doc.data() as StudySessionData);
     
-    // Calculate stats
+
     const totalSessions = sessions.length;
     const totalHours = sessions.reduce((sum, s) => sum + (s.duration || 0), 0) / 60;
     const quizSessions = sessions.filter(s => s.type === 'quiz' && s.score !== undefined);
@@ -101,7 +101,7 @@ class StudyService {
       ? quizSessions.reduce((sum, s) => sum + (s.score || 0), 0) / quizSessions.length 
       : 0;
     
-    // Calculate streak
+
     const currentStreak = this.calculateStreak(sessions);
     
     const stats: UserStudyStats = {
@@ -117,7 +117,7 @@ class StudyService {
     await setDoc(doc(db, 'userStats', auth.currentUser.uid), stats);
   }
 
-  // Calculate study streak
+
   private calculateStreak(sessions: StudySessionData[]): number {
     if (sessions.length === 0) return 0;
     
@@ -131,7 +131,7 @@ class StudyService {
     const daysSinceLastSession = Math.floor((today.getTime() - lastSession.getTime()) / (1000 * 60 * 60 * 24));
     if (daysSinceLastSession > 1) return 0;
     
-    // Check consecutive days
+
     for (let i = 1; i < sessions.length; i++) {
       const currentDate = sessions[i - 1]?.completedAt?.toDate();
       const previousDate = sessions[i]?.completedAt?.toDate();
@@ -150,7 +150,7 @@ class StudyService {
     return streak;
   }
 
-  // Get recent sessions for analytics
+
   async getRecentSessions(days: number = 7): Promise<StudySessionData[]> {
     if (!auth.currentUser) return [];
     

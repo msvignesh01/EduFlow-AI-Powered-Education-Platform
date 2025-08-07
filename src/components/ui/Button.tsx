@@ -14,7 +14,7 @@ interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'size'> {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   fullWidth?: boolean;
-  icon?: React.ReactNode; // For backward compatibility
+  icon?: React.ReactNode;
   glow?: boolean;
   shimmer?: boolean;
 }
@@ -26,7 +26,7 @@ export const Button: React.FC<ButtonProps> = ({
   isLoading = false,
   leftIcon,
   rightIcon,
-  icon, // For backward compatibility
+  icon,
   fullWidth = false,
   glow = false,
   shimmer = false,
@@ -105,14 +105,8 @@ export const Button: React.FC<ButtonProps> = ({
       transition={{ duration: 0.2 }}
       {...props}
     >
-      {/* Shimmer effect overlay */}
-      {shimmer && (
-        <div className="absolute inset-0 -top-px overflow-hidden rounded-inherit">
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-shimmer" />
-        </div>
-      )}
-
-      {/* Content */}
+      {
+}
       <div className="relative flex items-center justify-center">
         {isLoading ? (
           <PremiumLoader variant="spinner" size="sm" />
@@ -151,21 +145,4 @@ export const Button: React.FC<ButtonProps> = ({
         )}
       </div>
 
-      {/* Glow effect for hover */}
-      {glow && (
-        <motion.div
-          className="absolute inset-0 rounded-inherit opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          style={{
-            background: variant === 'primary'
-              ? 'radial-gradient(circle at center, rgba(59, 130, 246, 0.3) 0%, transparent 70%)'
-              : variant === 'secondary'
-              ? 'radial-gradient(circle at center, rgba(139, 92, 246, 0.3) 0%, transparent 70%)'
-              : 'radial-gradient(circle at center, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
-          }}
-        />
-      )}
-    </motion.button>
-  );
-};
-
-export default Button;
+      {

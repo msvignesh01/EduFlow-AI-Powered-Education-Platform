@@ -1,7 +1,7 @@
-// Premium Hybrid AI Service - Gemini 2.0 + Gemma 3 (API + Local)
+
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// AI Model Types and Providers
+
 export type AIModel = 'gemini-2.0-flash' | 'gemma-3-api' | 'gemma-3-local' | 'auto';
 export type AIProvider = 'google-gemini' | 'google-gemma' | 'ollama' | 'auto';
 
@@ -33,13 +33,13 @@ export interface NetworkStatus {
   lastChecked: number;
 }
 
-// Enhanced Hybrid AI Service Class
+
 class HybridAIService {
   private geminiAI: GoogleGenerativeAI;
   private networkStatus: NetworkStatus;
   private config: AIConfig;
   private lastHealthCheck = 0;
-  private healthCheckInterval = 30000; // 30 seconds
+  private healthCheckInterval = 30000;
 
   constructor() {
     this.geminiAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
@@ -50,7 +50,7 @@ class HybridAIService {
       fallbackToAlternateAPI: true,
       maxRetries: 3,
       timeout: 30000,
-      ollamaEndpoint: import.meta.env.VITE_OLLAMA_ENDPOINT || 'http://localhost:11434'
+      ollamaEndpoint: import.meta.env.VITE_OLLAMA_ENDPOINT || 'http:
     };
     
     this.networkStatus = {
@@ -65,7 +65,7 @@ class HybridAIService {
   }
 
   private async initializeService(): Promise<void> {
-    // Set up network status monitoring
+
     window.addEventListener('online', () => {
       this.networkStatus.isOnline = true;
       this.checkServiceHealth();
@@ -75,28 +75,28 @@ class HybridAIService {
       this.networkStatus.isOnline = false;
     });
 
-    // Initial health check
+
     await this.checkServiceHealth();
   }
 
-  // Health Check for All AI Services
+
   private async checkServiceHealth(): Promise<void> {
     const now = Date.now();
     if (now - this.lastHealthCheck < this.healthCheckInterval) {
-      return; // Skip if checked recently
+      return;
     }
 
     this.lastHealthCheck = now;
     this.networkStatus.lastChecked = now;
 
     try {
-      // Check Gemini availability
+
       this.networkStatus.isGeminiAvailable = await this.checkGeminiHealth();
       
-      // Check Gemma API availability  
+
       this.networkStatus.isGemmaAPIAvailable = await this.checkGemmaAPIHealth();
       
-      // Check Ollama availability
+
       this.networkStatus.isOllamaAvailable = await this.checkOllamaHealth();
       
       console.log('🔍 AI Services Health Check:', this.networkStatus);
@@ -119,7 +119,7 @@ class HybridAIService {
 
   private async checkGemmaAPIHealth(): Promise<boolean> {
     try {
-      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models', {
+      const response = await fetch('https:
         headers: {
           'Authorization': `Bearer ${import.meta.env.VITE_GEMINI_API_KEY}`
         },
@@ -142,9 +142,9 @@ class HybridAIService {
     }
   }
 
-  // Smart Model Selection
+
   private selectBestModel(forceMode: boolean = false): { model: AIModel; provider: AIProvider } {
-    // If user specified a preference and it's available
+
     if (this.config.preferredModel !== 'auto') {
       const isAvailable = this.isModelAvailable(this.config.preferredModel);
       if (isAvailable || forceMode) {
@@ -155,7 +155,7 @@ class HybridAIService {
       }
     }
 
-    // Auto-selection based on availability and performance
+
     if (this.networkStatus.isGeminiAvailable || forceMode) {
       return { model: 'gemini-2.0-flash', provider: 'google-gemini' };
     }
@@ -168,7 +168,7 @@ class HybridAIService {
       return { model: 'gemma-3-local', provider: 'ollama' };
     }
 
-    // Fallback to any available option - try Gemini anyway in force mode
+
     if (forceMode) {
       console.warn('⚠️ Force mode: Attempting Gemini despite health check failure');
       return { model: 'gemini-2.0-flash', provider: 'google-gemini' };
@@ -203,7 +203,7 @@ class HybridAIService {
     }
   }
 
-  // Generate Content with Intelligent Routing
+
   public async generateContent(
     prompt: string,
     options: Partial<AIConfig> = {},
@@ -212,7 +212,7 @@ class HybridAIService {
     const startTime = Date.now();
     const config = { ...this.config, ...options };
 
-    // Health check if needed (skip in force mode for faster response)
+
     if (!forceMode) {
       await this.checkServiceHealth();
     }
@@ -253,7 +253,7 @@ class HybridAIService {
     } catch (error) {
       console.error('❌ AI Generation failed:', error);
       
-      // Try different approaches in force mode
+
       if (forceMode && !this.networkStatus.isOllamaAvailable) {
         console.warn('⚠️ Force mode: Trying direct Gemini call despite errors');
         try {
@@ -271,7 +271,7 @@ class HybridAIService {
         }
       }
       
-      // Try fallback if enabled
+
       if (config.fallbackToOffline && this.networkStatus.isOllamaAvailable) {
         return this.generateWithFallback(prompt, startTime);
       }
@@ -297,7 +297,7 @@ class HybridAIService {
   }
 
   private async generateWithGemmaAPI(prompt: string): Promise<string> {
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemma-2-2b-it:generateContent', {
+    const response = await fetch('https:
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${import.meta.env.VITE_GEMINI_API_KEY}`,
@@ -333,14 +333,14 @@ class HybridAIService {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: ollamaModel, // Use your Gemma 3 12B model
+        model: ollamaModel,
         prompt: prompt,
         stream: false,
         options: {
           temperature: 0.7,
           top_p: 0.9,
           top_k: 40,
-          num_predict: 2048, // Max tokens for 12B model
+          num_predict: 2048,
           repeat_penalty: 1.1
         }
       }),
@@ -368,7 +368,7 @@ class HybridAIService {
         provider: 'ollama',
         isOffline: true,
         processingTime,
-        confidence: 0.8 // Lower confidence for fallback
+        confidence: 0.8
       };
     } catch (error) {
       console.error('❌ Fallback also failed:', error);
@@ -377,7 +377,7 @@ class HybridAIService {
   }
 
   private calculateConfidence(provider: AIProvider, processingTime: number): number {
-    // Base confidence by provider
+
     let confidence = 0.9;
     switch (provider) {
       case 'google-gemini':
@@ -391,14 +391,14 @@ class HybridAIService {
         break;
     }
 
-    // Adjust for processing time (faster = higher confidence)
+
     if (processingTime < 2000) confidence += 0.05;
     else if (processingTime > 10000) confidence -= 0.1;
 
     return Math.max(0.5, Math.min(1.0, confidence));
   }
 
-  // Configuration Methods
+
   public updateConfig(newConfig: Partial<AIConfig>): void {
     this.config = { ...this.config, ...newConfig };
     console.log('🔧 AI Config updated:', this.config);
@@ -409,26 +409,26 @@ class HybridAIService {
   }
 
   public async forceHealthCheck(): Promise<NetworkStatus> {
-    this.lastHealthCheck = 0; // Reset to force check
+    this.lastHealthCheck = 0;
     await this.checkServiceHealth();
     return this.getStatus();
   }
 
-  // Stream Generation (for real-time responses)
+
   public async *generateStream(prompt: string): AsyncGenerator<string, void, unknown> {
-    // Implementation for streaming responses
-    // This would be used for real-time chat experiences
+
+
     const response = await this.generateContent(prompt);
     
-    // Simulate streaming by yielding chunks
+
     const words = response.content.split(' ');
     for (let i = 0; i < words.length; i++) {
       yield words.slice(0, i + 1).join(' ');
-      await new Promise(resolve => setTimeout(resolve, 50)); // Simulate delay
+      await new Promise(resolve => setTimeout(resolve, 50));
     }
   }
 }
 
-// Export singleton instance
+
 export const hybridAI = new HybridAIService();
 export default hybridAI;
