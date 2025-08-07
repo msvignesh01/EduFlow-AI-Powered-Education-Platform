@@ -131,7 +131,7 @@ export const PremiumLoader: React.FC<PremiumLoaderProps> = ({
   return null;
 };
 
-// Premium skeleton loader
+
 interface SkeletonProps {
   className?: string;
   lines?: number;
@@ -178,7 +178,7 @@ export const PremiumSkeleton: React.FC<SkeletonProps> = ({
   );
 };
 
-// Premium loading overlay
+
 interface LoadingOverlayProps {
   isLoading: boolean;
   children: React.ReactNode;
@@ -219,7 +219,7 @@ export const PremiumLoadingOverlay: React.FC<LoadingOverlayProps> = ({
   );
 };
 
-// Premium progress bar
+
 interface ProgressBarProps {
   progress: number;
   className?: string;

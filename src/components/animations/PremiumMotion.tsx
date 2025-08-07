@@ -3,7 +3,7 @@ import { motion, HTMLMotionProps, SVGMotionProps, Variants } from 'framer-motion
 import { useReducedMotion } from '../../utils/accessibility';
 import { premiumVariants, premiumTransitions } from '../../utils/premiumAnimations';
 
-// Enhanced motion components that respect accessibility preferences
+
 interface PremiumMotionProps extends HTMLMotionProps<'div'> {
   variant?: keyof typeof premiumVariants;
   reduceMotion?: boolean;
@@ -24,10 +24,10 @@ export const PremiumMotion: React.FC<PremiumMotionProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const shouldReduceMotion = reduceMotion ?? prefersReducedMotion;
 
-  // Use selected variant or custom variants
+
   const motionVariants = variant ? premiumVariants[variant] : variants;
 
-  // Simplified animations for reduced motion
+
   const reducedMotionVariants: Variants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.2 } },
@@ -47,7 +47,7 @@ export const PremiumMotion: React.FC<PremiumMotionProps> = ({
   );
 };
 
-// Specialized motion components
+
 export const FadeIn: React.FC<Omit<PremiumMotionProps, 'variant'>> = (props) => (
   <PremiumMotion variant="fadeIn" {...props} />
 );
@@ -88,7 +88,7 @@ export const SlideInRight: React.FC<Omit<PremiumMotionProps, 'variant'>> = (prop
   <PremiumMotion variant="slideInRight" {...props} />
 );
 
-// Stagger container for animating lists
+
 interface StaggerContainerProps extends HTMLMotionProps<'div'> {
   children: React.ReactNode;
   staggerDelay?: number;
@@ -126,7 +126,7 @@ export const StaggerContainer: React.FC<StaggerContainerProps> = ({
   );
 };
 
-// Stagger item for use within StaggerContainer
+
 export const StaggerItem: React.FC<PremiumMotionProps> = ({
   children,
   ...props
@@ -151,7 +151,7 @@ export const StaggerItem: React.FC<PremiumMotionProps> = ({
   );
 };
 
-// Hover lift effect
+
 interface HoverLiftProps extends HTMLMotionProps<'div'> {
   children: React.ReactNode;
   liftHeight?: number;
@@ -184,7 +184,7 @@ export const HoverLift: React.FC<HoverLiftProps> = ({
   );
 };
 
-// Button press effect
+
 interface ButtonPressProps extends HTMLMotionProps<'button'> {
   children: React.ReactNode;
   pressScale?: number;
@@ -214,7 +214,7 @@ export const ButtonPress: React.FC<ButtonPressProps> = ({
   );
 };
 
-// Pulse animation for loading states
+
 interface PulseProps extends HTMLMotionProps<'div'> {
   children: React.ReactNode;
   pulseScale?: number;
@@ -250,7 +250,7 @@ export const Pulse: React.FC<PulseProps> = ({
   );
 };
 
-// Breathe animation for subtle attention
+
 interface BreatheProps extends HTMLMotionProps<'div'> {
   children: React.ReactNode;
   scale?: number;
@@ -289,7 +289,7 @@ export const Breathe: React.FC<BreatheProps> = ({
   );
 };
 
-// Page transition wrapper
+
 interface PageTransitionProps {
   children: React.ReactNode;
   direction?: 'left' | 'right' | 'fade';

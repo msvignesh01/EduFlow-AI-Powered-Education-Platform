@@ -55,7 +55,7 @@ const PDFConverter: React.FC = () => {
   const handleConvert = () => {
     if (file && selectedFormats.length > 0) {
       setIsConverting(true);
-      // Simulate conversion process
+
       setTimeout(() => {
         setIsConverting(false);
         setConversionComplete(true);

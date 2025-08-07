@@ -1,8 +1,8 @@
-// src/lib/fileParser.ts
+
 import * as pdfjsLib from 'pdfjs-dist';
 import mammoth from 'mammoth';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+pdfjsLib.GlobalWorkerOptions.workerSrc = `
 
 export const extractTextFromPDF = async (file: File): Promise<string> => {
   const reader = new FileReader();

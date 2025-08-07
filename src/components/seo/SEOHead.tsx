@@ -45,19 +45,12 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
 
   return (
     <Helmet>
-      {/* Basic Meta Tags */}
-      <title>{fullTitle}</title>
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywordsString} />
-      <meta name="author" content={author} />
-      
-      {/* Canonical URL */}
+      {
+}
       {canonical && <link rel="canonical" href={canonical} />}
       
-      {/* Robots */}
-      <meta name="robots" content={noIndex ? 'noindex,nofollow' : 'index,follow'} />
-      
-      {/* Open Graph / Facebook */}
+      {
+}
       <meta property="og:type" content={type} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
@@ -66,18 +59,8 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       <meta property="og:site_name" content={siteTitle} />
       <meta property="og:locale" content="en_US" />
       
-      {/* Article specific */}
-      {type === 'article' && publishedTime && (
-        <meta property="article:published_time" content={publishedTime} />
-      )}
-      {type === 'article' && modifiedTime && (
-        <meta property="article:modified_time" content={modifiedTime} />
-      )}
-      {type === 'article' && author && (
-        <meta property="article:author" content={author} />
-      )}
-      
-      {/* Twitter */}
+      {
+}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
@@ -85,30 +68,21 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       <meta name="twitter:creator" content="@edulearn" />
       <meta name="twitter:site" content="@edulearn" />
       
-      {/* Additional Meta Tags */}
-      <meta name="theme-color" content="#3b82f6" />
-      <meta name="msapplication-TileColor" content="#3b82f6" />
-      <meta name="application-name" content={siteTitle} />
-      
-      {/* Viewport */}
+      {
+}
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
       
-      {/* Preconnect to external domains */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      
-      {/* Favicon */}
+      {
+}
       <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
       <link rel="icon" type="image/png" href="/favicon.png" />
       <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       
-      {/* Manifest */}
-      <link rel="manifest" href="/manifest.json" />
-      
-      {/* JSON-LD Structured Data */}
+      {
+}
       <script type="application/ld+json">
         {JSON.stringify({
-          "@context": "https://schema.org",
+          "@context": "https:
           "@type": "EducationalOrganization",
           "name": siteTitle,
           "description": description,
@@ -118,9 +92,9 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
             "url": `${url}/logo.png`
           },
           "sameAs": [
-            "https://twitter.com/edulearn",
-            "https://linkedin.com/company/edulearn",
-            "https://github.com/edulearn"
+            "https:
+            "https:
+            "https:
           ],
           "contactPoint": {
             "@type": "ContactPoint",
@@ -138,7 +112,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
   );
 };
 
-// Predefined SEO configurations for different pages
+
 export const seoConfigs = {
   home: {
     title: 'EduLearn - Premium AI-Powered Learning Platform',
@@ -170,7 +144,7 @@ export const seoConfigs = {
     keywords: ['AI tutor', 'chat learning', 'instant help', 'AI assistant', 'educational chat']
   },
   
-  // Removed demo SEO config - no longer needed
+
   
   studyAnalysis: {
     title: 'Study Analysis - EduLearn',
@@ -179,7 +153,7 @@ export const seoConfigs = {
   }
 };
 
-// Hook for easy SEO management
+
 export const useSEO = (pageKey: keyof typeof seoConfigs, customConfig?: Partial<SEOHeadProps>) => {
   const config = seoConfigs[pageKey];
   const mergedConfig = { ...config, ...customConfig };

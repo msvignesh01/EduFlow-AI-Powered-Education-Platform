@@ -1,4 +1,4 @@
-// Premium Offline-First Chat Component with Dual AI Support
+
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -51,7 +51,7 @@ export const PremiumAIChat: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Monitor online/offline status
+
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -65,17 +65,17 @@ export const PremiumAIChat: React.FC = () => {
     };
   }, []);
 
-  // Auto-scroll to bottom
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Load saved session on mount
+
   useEffect(() => {
     loadLastSession();
   }, []);
 
-  // Save session when messages change
+
   useEffect(() => {
     if (messages.length > 0 && currentSession) {
       saveCurrentSession();
@@ -140,7 +140,7 @@ export const PremiumAIChat: React.FC = () => {
     setInputValue('');
     setIsLoading(true);
 
-    // Create pending assistant message
+
     const assistantMessageId = `msg_${Date.now()}_assistant`;
     const pendingMessage: Message = {
       id: assistantMessageId,
@@ -153,7 +153,7 @@ export const PremiumAIChat: React.FC = () => {
     setMessages(prev => [...prev, pendingMessage]);
 
     try {
-      // Check cache first
+
       const cachedResponse = await storageService.getCachedAIResponse(
         userMessage.content, 
         preferredModel
@@ -162,7 +162,7 @@ export const PremiumAIChat: React.FC = () => {
       let aiResponse: AIResponse;
 
       if (cachedResponse && isOnline) {
-        // Use cached response but still mark as sent
+
         aiResponse = {
           content: cachedResponse,
           model: preferredModel === 'auto' ? 'gemini-2.0-flash' : preferredModel,
@@ -170,13 +170,13 @@ export const PremiumAIChat: React.FC = () => {
           processingTime: 50
         };
       } else {
-        // Generate new response
+
         aiResponse = await aiService.generateContent(userMessage.content, {
           model: preferredModel,
           priority: isOnline ? 'quality' : 'offline'
         });
 
-        // Cache the response
+
         await storageService.cacheAIResponse(
           userMessage.content,
           aiResponse.content,
@@ -184,7 +184,7 @@ export const PremiumAIChat: React.FC = () => {
         );
       }
 
-      // Update the pending message
+
       setMessages(prev => prev.map(msg => 
         msg.id === assistantMessageId ? {
           ...msg,
@@ -198,7 +198,7 @@ export const PremiumAIChat: React.FC = () => {
     } catch (error) {
       console.error('AI Response error:', error);
       
-      // Update message with error status
+
       setMessages(prev => prev.map(msg => 
         msg.id === assistantMessageId ? {
           ...msg,
@@ -266,57 +266,8 @@ export const PremiumAIChat: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full max-w-4xl mx-auto">
-      {/* Header */}
-      <Card className="p-4 mb-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600">
-              <MessageSquare className="w-5 h-5 text-white" />
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                Premium AI Assistant
-              </h2>
-              <div className="flex items-center space-x-2 text-sm text-gray-500">
-                {isOnline ? (
-                  <><Wifi className="w-4 h-4 text-green-500" /> Online</>
-                ) : (
-                  <><WifiOff className="w-4 h-4 text-orange-500" /> Offline Mode</>
-                )}
-                <span>•</span>
-                <span>Model: {preferredModel}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowSettings(!showSettings)}
-              leftIcon={<Settings size={16} />}
-            >
-              Settings
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={exportChat}
-              leftIcon={<Download size={16} />}
-            >
-              Export
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearChat}
-            >
-              Clear
-            </Button>
-          </div>
-        </div>
-
-        {/* Settings Panel */}
+      {
+}
         <AnimatePresence>
           {showSettings && (
             <motion.div
@@ -352,82 +303,8 @@ export const PremiumAIChat: React.FC = () => {
         </AnimatePresence>
       </Card>
 
-      {/* Messages */}
-      <Card className="flex-1 p-4 overflow-hidden">
-        <div className="h-full overflow-y-auto space-y-4">
-          <AnimatePresence>
-            {messages.map((message) => (
-              <motion.div
-                key={message.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                className={cn(
-                  'flex space-x-3',
-                  message.role === 'user' ? 'justify-end' : 'justify-start'
-                )}
-              >
-                {message.role === 'assistant' && (
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                      <Bot className="w-4 h-4 text-white" />
-                    </div>
-                  </div>
-                )}
-
-                <div
-                  className={cn(
-                    'max-w-lg p-4 rounded-2xl',
-                    message.role === 'user'
-                      ? 'bg-blue-500 text-white ml-auto'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white'
-                  )}
-                >
-                  <div className="text-sm leading-relaxed whitespace-pre-wrap">
-                    {message.content || (
-                      <div className="flex items-center space-x-2">
-                        <div className="animate-pulse">Thinking...</div>
-                        {isLoading && (
-                          <div className="flex space-x-1">
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
-                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {message.role === 'assistant' && message.content && (
-                    <div className="flex items-center justify-between mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                      <div className="flex items-center space-x-2 text-xs text-gray-500">
-                        {getModelIcon(message.model, message.isOffline)}
-                        <span>
-                          {message.isOffline ? 'Offline' : 'Online'} • {message.model}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-1">
-                        {getStatusIcon(message.status)}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {message.role === 'user' && (
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                      <User className="w-4 h-4 text-gray-600 dark:text-gray-300" />
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          <div ref={messagesEndRef} />
-        </div>
-      </Card>
-
-      {/* Input */}
+      {
+}
       <Card className="p-4 mt-4">
         <div className="flex space-x-3">
           <textarea

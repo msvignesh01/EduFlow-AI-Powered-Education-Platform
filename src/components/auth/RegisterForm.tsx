@@ -33,7 +33,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({ onSwitchToLogin, onC
       await register(formData.email, formData.username, formData.password);
       onClose();
     } catch (error) {
-      // Error is handled by the store
+
     }
   };
 

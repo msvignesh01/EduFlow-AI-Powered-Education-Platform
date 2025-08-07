@@ -1,6 +1,6 @@
-// Define core types for the application
 
-// API Response types (matching backend)
+
+
 export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
@@ -13,7 +13,7 @@ export interface ContentGenerationResponse {
   generation_id?: number;
 }
 
-// User types (matching backend)
+
 export interface User {
   id: number;
   email: string;
@@ -34,7 +34,7 @@ export interface AuthToken {
   token_type: string;
 }
 
-// Legacy User interface for compatibility
+
 export interface LegacyUser {
   id: string;
   name: string;
@@ -56,13 +56,13 @@ export interface StudySession {
   id: string;
   userId: string;
   date: Date;
-  duration: number; // in minutes
+  duration: number;
   subject: string;
-  productivity: number; // 1-10
+  productivity: number;
   notes: string;
 }
 
-// Content Generation types
+
 export interface ContentGeneration {
   id: number;
   user_id: number;

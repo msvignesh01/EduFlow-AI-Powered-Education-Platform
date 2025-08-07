@@ -70,101 +70,8 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
           </motion.div>
         </AnimatePresence>
         
-        {/* Glow effect */}
-        <motion.div
-          className="absolute inset-0 rounded-xl"
-          animate={{
-            boxShadow: isDark 
-              ? '0 0 20px rgba(59, 130, 246, 0.3)' 
-              : '0 0 20px rgba(234, 179, 8, 0.3)',
-          }}
-          transition={{ duration: 0.3 }}
-        />
-      </motion.button>
-    );
-  }
-
-  if (variant === 'dropdown') {
-    const themes = [
-      { value: 'light', label: 'Light', icon: Sun },
-      { value: 'dark', label: 'Dark', icon: Moon },
-      { value: 'system', label: 'System', icon: Monitor },
-    ];
-
-    return (
-      <div className="relative">
-        <motion.button
-          onClick={() => setIsOpen(!isOpen)}
-          className={cn(
-            'flex items-center space-x-2 px-3 py-2 rounded-xl',
-            'bg-white/10 dark:bg-black/10 backdrop-blur-md border border-white/20 dark:border-white/10',
-            'hover:bg-white/20 dark:hover:bg-black/20 transition-all duration-300',
-            'focus:outline-none focus:ring-2 focus:ring-primary-500/50',
-            className
-          )}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={theme}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 10 }}
-              transition={{ duration: 0.2 }}
-              className="flex items-center space-x-2"
-            >
-              {theme === 'light' && <Sun size={16} className="text-yellow-500" />}
-              {theme === 'dark' && <Moon size={16} className="text-blue-400" />}
-              {theme === 'system' && <Monitor size={16} className="text-gray-500" />}
-              <span className="text-sm font-medium capitalize">{theme}</span>
-            </motion.div>
-          </AnimatePresence>
-        </motion.button>
-
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-              className="absolute top-full mt-2 right-0 w-40 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-white/20 dark:border-gray-700/50 rounded-xl shadow-premium overflow-hidden z-50"
-            >
-              {themes.map((themeOption) => {
-                const Icon = themeOption?.icon || Sun;
-                return (
-                  <motion.button
-                    key={themeOption.value}
-                    onClick={() => {
-                      setTheme(themeOption.value as any);
-                      setIsOpen(false);
-                    }}
-                    className={cn(
-                      'w-full flex items-center space-x-3 px-4 py-3 text-left transition-colors',
-                      'hover:bg-white/50 dark:hover:bg-gray-700/50',
-                      theme === themeOption.value && 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400'
-                    )}
-                    whileHover={{ x: 4 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Icon size={16} />
-                    <span className="text-sm font-medium">{themeOption.label}</span>
-                    {theme === themeOption.value && (
-                      <motion.div
-                        layoutId="activeTheme"
-                        className="ml-auto w-2 h-2 bg-primary-500 rounded-full"
-                        transition={{ duration: 0.2 }}
-                      />
-                    )}
-                  </motion.button>
-                );
-              })}
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Backdrop */}
+        {
+}
         {isOpen && (
           <div
             className="fixed inset-0 z-40"
@@ -208,7 +115,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   return null;
 };
 
-// Floating theme toggle for mobile
+
 export const FloatingThemeToggle: React.FC = () => {
   const { toggleTheme, isDark } = useTheme();
 

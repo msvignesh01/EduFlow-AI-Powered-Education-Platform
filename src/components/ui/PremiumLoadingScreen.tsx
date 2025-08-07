@@ -28,7 +28,7 @@ export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({
       setProgress(prev => {
         const newProgress = prev + Math.random() * 15 + 5;
         
-        // Update current step based on progress
+
         const stepIndex = Math.floor((newProgress / 100) * loadingSteps.length);
         setCurrentStep(Math.min(stepIndex, loadingSteps.length - 1));
         
@@ -60,22 +60,8 @@ export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {/* Animated background */}
-          <div className="absolute inset-0 overflow-hidden">
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20"
-              animate={{
-                background: [
-                  'linear-gradient(45deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2), rgba(236, 72, 153, 0.2))',
-                  'linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(236, 72, 153, 0.2), rgba(59, 130, 246, 0.2))',
-                  'linear-gradient(225deg, rgba(236, 72, 153, 0.2), rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2))',
-                  'linear-gradient(315deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2), rgba(236, 72, 153, 0.2))',
-                ]
-              }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-            />
-            
-            {/* Floating particles */}
+          {
+}
             {[...Array(20)].map((_, i) => (
               <motion.div
                 key={i}
@@ -99,9 +85,8 @@ export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({
             ))}
           </div>
 
-          {/* Main content */}
-          <div className="relative z-10 text-center max-w-md mx-auto px-6">
-            {/* Logo */}
+          {
+}
             <motion.div
               className="mb-8"
               initial={{ scale: 0, rotate: -180 }}
@@ -123,21 +108,8 @@ export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({
                   <GraduationCap size={40} className="text-white" />
                 </motion.div>
                 
-                {/* Orbiting elements */}
-                <motion.div
-                  className="absolute inset-0"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
-                >
-                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-blue-400 rounded-full" />
-                  <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-2 h-2 bg-purple-400 rounded-full" />
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-pink-400 rounded-full" />
-                  <div className="absolute top-1/2 -left-2 transform -translate-y-1/2 w-2 h-2 bg-green-400 rounded-full" />
-                </motion.div>
-              </div>
-            </motion.div>
-
-            {/* Brand name */}
+                {
+}
             <motion.h1
               className="text-4xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent mb-2"
               initial={{ opacity: 0, y: 20 }}
@@ -156,35 +128,8 @@ export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({
               Premium Learning Platform
             </motion.p>
 
-            {/* Current step indicator */}
-            <motion.div
-              className="mb-8"
-              key={currentStep}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <motion.div
-                className={`w-16 h-16 mx-auto rounded-2xl bg-gradient-to-r ${currentStepData.color} flex items-center justify-center mb-4 shadow-lg`}
-                animate={{
-                  scale: [1, 1.1, 1],
-                  rotate: [0, 5, -5, 0],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                <CurrentIcon size={32} className="text-white" />
-              </motion.div>
-              
-              <motion.p
-                className="text-white font-medium"
-                animate={{ opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                {currentStepData.text}
-              </motion.p>
-            </motion.div>
-
-            {/* Progress bar */}
+            {
+}
             <div className="relative">
               <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm">
                 <motion.div
@@ -208,17 +153,4 @@ export const PremiumLoadingScreen: React.FC<PremiumLoadingScreenProps> = ({
               />
             </div>
 
-            {/* Progress percentage */}
-            <motion.p
-              className="text-blue-200 mt-4 font-mono text-sm"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            >
-              {Math.round(progress)}%
-            </motion.p>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-};
+            {

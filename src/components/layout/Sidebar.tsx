@@ -41,7 +41,7 @@ const secondaryNavItems: NavItem[] = [
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
 
-  // Desktop-focused sidebar behavior - no touch gestures needed
+
 
   const NavItem: React.FC<{ item: NavItem }> = ({ item }) => {
     const isActive = location.pathname === item.path;
@@ -86,25 +86,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Desktop-only sidebar - no backdrop needed */}
-
-      {/* Enhanced Sidebar with responsive design and swipe gestures */}
+      {
+}
       <motion.aside
         className={cn(
           'fixed inset-y-0 left-0 z-40 flex flex-col',
           'bg-white/98 dark:bg-gray-900/98 backdrop-blur-xl',
           'border-r border-gray-200/80 dark:border-gray-700/80 shadow-xl',
-          // Optimized width - less cramping
+
           'w-56 lg:w-64 xl:w-72',
-          // Smooth transform for desktop interactions
+
           'transform transition-all duration-300 ease-out',
           isOpen ? 'translate-x-0' : '-translate-x-full',
-          // Always visible on desktop, no mobile overrides
+
           'translate-x-0 static shadow-none'
         )}
         initial={false}
         animate={{
-          x: isOpen ? 0 : 0, // Always visible on desktop
+          x: isOpen ? 0 : 0,
         }}
         transition={{
           type: "spring",
@@ -112,72 +111,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           damping: 30
         }}
       >
-        {/* Desktop toggle button - minimal and professional */}
-        <motion.button
-          className="absolute top-6 right-4 z-10 p-2 rounded-lg bg-gray-100/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 hover:bg-gray-200/80 dark:hover:bg-gray-700/80 transition-colors"
-          onClick={onClose}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <X size={18} className="text-gray-600 dark:text-gray-400" />
-        </motion.button>
-
-        {/* Enhanced sidebar content */}
+        {
+}
         <div className={cn(
           'flex flex-col h-full pt-16 xl:pt-18 2xl:pt-20'
         )}>
-          {/* Desktop sidebar content */}
-
-          <div className={cn(
-            'flex-1 overflow-y-auto',
-            responsive.spacing.component
-          )}>
-            <motion.nav
-              className="space-y-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, staggerChildren: 0.05 }}
-            >
-              {primaryNavItems.map((item, index) => (
-                <motion.div
-                  key={item.path}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + index * 0.05 }}
-                >
-                  <NavItem item={item} />
-                </motion.div>
-              ))}
-            </motion.nav>
-
-            <motion.div
-              className="mt-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-            >
-              <h3 className="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 mb-3">
-                Resources
-              </h3>
-              <nav className="space-y-2">
-                {secondaryNavItems.map((item, index) => (
-                  <motion.div
-                    key={item.path}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.7 + index * 0.05 }}
-                  >
-                    <NavItem item={item} />
-                  </motion.div>
-                ))}
-              </nav>
-            </motion.div>
-          </div>
-
-          {/* Enhanced logout section */}
+          {
+}
           <motion.div
             className="p-4 border-t border-white/10 dark:border-gray-800/50"
             initial={{ opacity: 0, y: 20 }}

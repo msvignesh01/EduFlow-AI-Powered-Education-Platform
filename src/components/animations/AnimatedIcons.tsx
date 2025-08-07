@@ -120,7 +120,7 @@ const createAnimatedIcon = (IconComponent: React.ComponentType<any>) => {
   );
 };
 
-// Animated Icons
+
 export const AnimatedBookOpen = createAnimatedIcon(BookOpen);
 export const AnimatedBrain = createAnimatedIcon(Brain);
 export const AnimatedZap = createAnimatedIcon(Zap);
@@ -148,7 +148,7 @@ export const AnimatedVolumeX = createAnimatedIcon(VolumeX);
 export const AnimatedBell = createAnimatedIcon(Bell);
 export const AnimatedUser = createAnimatedIcon(User);
 
-// Special animated icons with custom animations
+
 export const PulsingStar: React.FC<AnimatedIconProps> = ({ 
   size = 24, 
   className = '' 
@@ -252,7 +252,7 @@ export const FloatingBrain: React.FC<AnimatedIconProps> = ({
   </motion.div>
 );
 
-// Interactive animated icons
+
 export const InteractiveCheckCircle: React.FC<AnimatedIconProps & { 
   isChecked?: boolean;
   onToggle?: () => void;
@@ -305,7 +305,7 @@ export const AnimatedMenuToggle: React.FC<AnimatedIconProps & {
   </motion.div>
 );
 
-// Loading states for icons
+
 export const LoadingIcon: React.FC<AnimatedIconProps> = ({ 
   size = 24, 
   className = '' 

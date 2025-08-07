@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Premium glass effect utility
+
 export const glassEffect = {
   light: 'bg-white/10 backdrop-blur-md border border-white/20',
   dark: 'bg-black/10 backdrop-blur-md border border-white/10',
@@ -14,7 +14,7 @@ export const glassEffect = {
   emerald: 'bg-emerald-500/10 backdrop-blur-md border border-emerald-500/20',
 };
 
-// Premium gradient utilities
+
 export const gradients = {
   primary: 'bg-gradient-to-r from-blue-600 to-blue-700',
   secondary: 'bg-gradient-to-r from-purple-600 to-purple-700',
@@ -24,7 +24,7 @@ export const gradients = {
   mesh: 'bg-gradient-mesh',
 };
 
-// Premium shadow utilities
+
 export const shadows = {
   glass: 'shadow-glass',
   premium: 'shadow-premium',
@@ -35,7 +35,7 @@ export const shadows = {
   },
 };
 
-// Animation utilities
+
 export const animations = {
   fadeIn: 'animate-fade-in',
   slideUp: 'animate-slide-up',
@@ -50,9 +50,9 @@ export const animations = {
   bounce: 'animate-bounce-slow',
 };
 
-// Desktop-first responsive utilities for premium SaaS experience
+
 export const responsive = {
-  // Container variants optimized for better space utilization
+
   container: {
     default: 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
     narrow: 'max-w-5xl mx-auto px-4 sm:px-6 lg:px-8',
@@ -61,7 +61,7 @@ export const responsive = {
     modal: 'w-full max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto px-4 sm:px-6',
   },
 
-  // Better responsive grid system for full space utilization
+
   grid: {
     cols1: 'grid grid-cols-1',
     cols2: 'grid grid-cols-1 sm:grid-cols-2',
@@ -75,7 +75,7 @@ export const responsive = {
     dashboard: 'grid grid-cols-12 gap-4 lg:gap-6',
   },
 
-  // Flexible layouts
+
   flex: {
     center: 'flex items-center justify-center',
     between: 'flex items-center justify-between',
@@ -89,7 +89,7 @@ export const responsive = {
     responsive: 'flex flex-col md:flex-row md:items-center md:justify-between',
   },
 
-  // Better spacing system for responsive layouts
+
   spacing: {
     section: 'py-8 lg:py-12',
     component: 'p-4 lg:p-6',
@@ -107,7 +107,7 @@ export const responsive = {
     },
   },
 
-  // Better responsive typography
+
   text: {
     xs: 'text-xs lg:text-sm',
     sm: 'text-sm lg:text-base',
@@ -121,7 +121,7 @@ export const responsive = {
     display: 'text-5xl lg:text-6xl xl:text-7xl',
   },
 
-  // Better component sizing for responsive interfaces
+
   desktop: {
     button: {
       sm: 'h-9 lg:h-10 px-4 lg:px-5',
@@ -140,7 +140,7 @@ export const responsive = {
     },
   },
 
-  // Hide/show utilities
+
   visibility: {
     mobileOnly: 'block md:hidden',
     tabletOnly: 'hidden md:block lg:hidden',
@@ -151,7 +151,7 @@ export const responsive = {
   },
 };
 
-// Theme-aware utilities
+
 export const themeAware = {
   bg: {
     primary: 'bg-white dark:bg-gray-900',

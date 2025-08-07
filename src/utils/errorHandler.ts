@@ -94,10 +94,10 @@ export class ErrorHandler {
       appError = error;
     }
 
-    // Log error for debugging
+
     console.error('Error handled:', appError);
 
-    // Show toast notification
+
     if (showToastNotification) {
       switch (appError.type) {
         case ErrorType.NETWORK:
@@ -120,8 +120,8 @@ export class ErrorHandler {
       }
     }
 
-    // Additional error reporting could go here
-    // e.g., send to error tracking service
+
+
   }
 
   static async withErrorHandling<T>(
@@ -141,7 +141,7 @@ export class ErrorHandler {
   }
 }
 
-// Utility functions for common error scenarios
+
 export const handleApiError = (error: any): AppError => {
   return ErrorHandler.fromHttpError(error);
 };

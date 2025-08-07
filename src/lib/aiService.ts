@@ -1,7 +1,7 @@
-// Premium Hybrid AI Service - Gemini 2.0 + Gemma 3 (API + Local)
+
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// AI Model Types and Providers
+
 export type AIModel = 'gemini-2.0-flash' | 'gemma-3-api' | 'gemma-3-local' | 'gemma-3-offline' | 'auto';
 export type AIProvider = 'google-gemini' | 'google-gemma' | 'ollama' | 'auto';
 
@@ -33,13 +33,13 @@ export interface NetworkStatus {
   lastChecked: number;
 }
 
-// Enhanced Hybrid AI Service Class
+
 class HybridAIService {
   private geminiAI: GoogleGenerativeAI;
   private networkStatus: NetworkStatus;
   private config: AIConfig;
   private lastHealthCheck = 0;
-  private healthCheckInterval = 30000; // 30 seconds
+  private healthCheckInterval = 30000;
   private isOfflineModelLoaded = false;
   private offlineModel: any = null;
 
@@ -52,7 +52,7 @@ class HybridAIService {
       fallbackToAlternateAPI: true,
       maxRetries: 3,
       timeout: 30000,
-      ollamaEndpoint: import.meta.env.VITE_OLLAMA_ENDPOINT || 'http://localhost:11434'
+      ollamaEndpoint: import.meta.env.VITE_OLLAMA_ENDPOINT || 'http:
     };
     
     this.networkStatus = {
@@ -66,7 +66,7 @@ class HybridAIService {
     this.initializeService();
   }
 
-  // Initialize services and check availability
+
   private async initializeService() {
     try {
       await this.checkNetworkStatus();
@@ -76,13 +76,13 @@ class HybridAIService {
     }
   }
 
-  // Check network status and AI service availability
+
   private async checkNetworkStatus(): Promise<void> {
     this.networkStatus.isOnline = navigator.onLine;
     this.networkStatus.lastChecked = Date.now();
     
     if (this.networkStatus.isOnline) {
-      // Check Gemini availability
+
       try {
         const model = this.geminiAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
         this.networkStatus.isGeminiAvailable = true;
@@ -92,13 +92,13 @@ class HybridAIService {
     }
   }
 
-  // Initialize Gemma 3 Offline Model (simulated - would use actual model loading)
+
   private async initializeOfflineModel() {
     try {
       console.log('🤖 Initializing Gemma 3 offline model...');
       
-      // Simulated offline model initialization
-      // In production, this would load the actual Gemma 3 model
+
+
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       this.offlineModel = {
@@ -106,12 +106,12 @@ class HybridAIService {
         version: '3.0.0',
         capabilities: ['text-generation', 'conversation', 'code-assistance'],
         maxTokens: 8192,
-        // Simulated model weights/parameters would be loaded here
+
         generateText: async (prompt: string) => {
-          // Simulated offline text generation
+
           await new Promise(resolve => setTimeout(resolve, 1000));
           
-          // Basic offline responses for common educational queries
+
           const responses = {
             'explain': 'Here is an explanation based on offline knowledge...',
             'summarize': 'Summary generated using offline model...',
@@ -137,12 +137,12 @@ class HybridAIService {
     }
   }
 
-  // Check if online
+
   private isOnline(): boolean {
     return navigator.onLine;
   }
 
-  // Generate content using Gemini 2.0 Flash
+
   private async generateWithGemini(prompt: string): Promise<string> {
     const model = this.geminiAI.getGenerativeModel({ 
       model: "gemini-2.0-flash-exp",
@@ -159,7 +159,7 @@ class HybridAIService {
     return response.text();
   }
 
-  // Generate content using offline Gemma 3
+
   private async generateWithGemma(prompt: string): Promise<string> {
     if (!this.isOfflineModelLoaded || !this.offlineModel) {
       throw new Error('Offline model not available');
@@ -168,7 +168,7 @@ class HybridAIService {
     return await this.offlineModel.generateText(prompt);
   }
 
-  // Enhanced content generation with automatic model selection
+
   async generateContent(
     prompt: string, 
     options?: { 
@@ -181,7 +181,7 @@ class HybridAIService {
     const selectedModel = options?.model || this.config.preferredModel;
     
     try {
-      // Determine which model to use
+
       let modelToUse: AIModel = 'gemini-2.0-flash';
       let isOffline = false;
 
@@ -201,14 +201,14 @@ class HybridAIService {
         isOffline = true;
       }
 
-      // Enhance prompt with context if provided
+
       const enhancedPrompt = options?.context 
         ? `Context: ${options.context}\n\nQuery: ${prompt}`
         : prompt;
 
       let content: string;
 
-      // Generate content based on selected model
+
       if (modelToUse === 'gemma-3-offline') {
         content = await this.generateWithGemma(enhancedPrompt);
       } else {
@@ -229,7 +229,7 @@ class HybridAIService {
     } catch (error) {
       console.error('AI Generation Error:', error);
       
-      // Fallback to offline model if online fails and fallback is enabled
+
       if (this.config.fallbackToOffline && 
           !this.isOnline() && 
           this.isOfflineModelLoaded && 
@@ -262,7 +262,7 @@ class HybridAIService {
     }
   }
 
-  // Chat conversation with context memory
+
   async chatConversation(
     messages: Array<{ role: 'user' | 'assistant', content: string }>,
     options?: { model?: AIModel }
@@ -277,7 +277,7 @@ class HybridAIService {
     });
   }
 
-  // Educational content generation
+
   async generateEducationalContent(
     topic: string,
     type: 'explanation' | 'summary' | 'quiz' | 'notes',
@@ -295,7 +295,7 @@ class HybridAIService {
     });
   }
 
-  // Code assistance
+
   async generateCodeHelp(
     code: string,
     language: string,
@@ -313,12 +313,12 @@ class HybridAIService {
     });
   }
 
-  // Update configuration
+
   updateConfig(newConfig: Partial<AIConfig>) {
     this.config = { ...this.config, ...newConfig };
   }
 
-  // Get model status
+
   getModelStatus() {
     return {
       online: this.isOnline(),
@@ -328,7 +328,7 @@ class HybridAIService {
     };
   }
 
-  // Preload offline model (for better UX)
+
   async preloadOfflineModel() {
     if (!this.isOfflineModelLoaded) {
       await this.initializeOfflineModel();
@@ -336,10 +336,10 @@ class HybridAIService {
   }
 }
 
-// Create singleton instance
+
 export const aiService = new HybridAIService();
 
-// Legacy function for backward compatibility
+
 export const generateContent = async (prompt: string): Promise<string> => {
   const response = await aiService.generateContent(prompt);
   return response.content;

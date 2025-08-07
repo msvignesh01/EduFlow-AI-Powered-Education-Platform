@@ -1,4 +1,4 @@
-// Premium Offline Sync Hook for SaaS Platform
+
 import { useState, useEffect, useCallback } from 'react';
 import { 
   collection, 
@@ -45,7 +45,7 @@ interface SyncStatus {
 export const useOfflineSync = (options: UseSyncOptions = {}) => {
   const {
     enableRealTime = true,
-    syncInterval = 30000, // 30 seconds
+    syncInterval = 30000,
     maxRetries = 3,
     collections = ['user_data', 'study_sessions', 'preferences']
   } = options;
@@ -62,7 +62,7 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
   const [syncQueue, setSyncQueue] = useState<SyncItem[]>([]);
   const [realtimeUnsubscribes, setRealtimeUnsubscribes] = useState<(() => void)[]>([]);
 
-  // Monitor online/offline status
+
   useEffect(() => {
     const handleOnline = async () => {
       setSyncStatus(prev => ({ ...prev, isOnline: true }));
@@ -86,12 +86,12 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
     };
   }, [isAuthenticated]);
 
-  // Load pending sync queue on mount
+
   useEffect(() => {
     loadSyncQueue();
   }, []);
 
-  // Setup real-time sync when authenticated and online
+
   useEffect(() => {
     if (isAuthenticated && syncStatus.isOnline && enableRealTime) {
       setupRealtimeSync();
@@ -102,7 +102,7 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
     return () => cleanupRealtimeSync();
   }, [isAuthenticated, syncStatus.isOnline, enableRealTime]);
 
-  // Periodic sync
+
   useEffect(() => {
     if (!isAuthenticated || !syncStatus.isOnline) return;
 
@@ -143,10 +143,10 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
     setSyncQueue(newQueue);
     await saveSyncQueue(newQueue);
 
-    // Also save to local storage immediately
+
     await storageService.setItem(`${item.collection}_${item.id}`, item.data);
 
-    // If online, try to sync immediately
+
     if (syncStatus.isOnline && isAuthenticated) {
       performSync();
     }
@@ -171,10 +171,10 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
             const data = { id: change.doc.id, ...change.doc.data() };
             
             if (change.type === 'added' || change.type === 'modified') {
-              // Update local storage
+
               await storageService.setItem(`${collectionName}_${change.doc.id}`, data);
             } else if (change.type === 'removed') {
-              // Remove from local storage
+
               await storageService.removeItem(`${collectionName}_${change.doc.id}`);
             }
           });
@@ -225,7 +225,7 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
               }, { merge: item.action === 'update' });
             }
 
-            // Mark as synced
+
             return { ...item, synced: true };
           } catch (error) {
             retries++;
@@ -235,9 +235,9 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
                 ...prev,
                 syncErrors: [...prev.syncErrors, `Failed to sync ${item.id}: ${error}`]
               }));
-              return item; // Return unsynced
+              return item;
             }
-            // Wait before retry
+
             await new Promise(resolve => setTimeout(resolve, 1000 * retries));
           }
         }
@@ -269,17 +269,17 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
     }
   };
 
-  // Public API methods
+
   const saveData = useCallback(async (
     collection: string, 
     id: string, 
     data: any, 
     action: 'create' | 'update' = 'create'
   ) => {
-    // Save locally first
+
     await storageService.setItem(`${collection}_${id}`, data);
 
-    // Add to sync queue
+
     await addToSyncQueue({
       id,
       data,
@@ -291,10 +291,10 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
   }, [addToSyncQueue]);
 
   const deleteData = useCallback(async (collection: string, id: string) => {
-    // Remove locally
+
     await storageService.removeItem(`${collection}_${id}`);
 
-    // Add to sync queue
+
     await addToSyncQueue({
       id,
       data: null,
@@ -307,13 +307,13 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
 
   const getData = useCallback(async (collectionName: string, id: string) => {
     try {
-      // Try local storage first
+
       const localData = await storageService.getItem(`${collectionName}_${id}`);
       if (localData) {
         return localData;
       }
 
-      // If online and no local data, try fetching from Firebase
+
       if (syncStatus.isOnline && isAuthenticated && user?.id) {
         const collectionRef = collection(db, collectionName);
         const q = query(collectionRef, where('userId', '==', user.id));
@@ -321,7 +321,7 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
         
         if (!docSnap.empty) {
           const data = docSnap.docs[0].data();
-          // Cache locally
+
           await storageService.setItem(`${collectionName}_${id}`, data);
           return data;
         }
@@ -361,7 +361,7 @@ export const useOfflineSync = (options: UseSyncOptions = {}) => {
       await storageService.importData(data);
       await loadSyncQueue();
       
-      // If online, sync the imported data
+
       if (syncStatus.isOnline) {
         await performSync();
       }

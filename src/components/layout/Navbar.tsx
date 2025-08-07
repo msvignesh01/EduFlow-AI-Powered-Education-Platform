@@ -8,7 +8,7 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onNavItemClick, currentRoute }) => {
-  // Removed mobile menu - desktop only
+
 
   const navItems = [
     { name: 'Dashboard', icon: <BarChart2 size={20} />, route: 'dashboard' },
@@ -19,7 +19,7 @@ const Navbar: React.FC<NavbarProps> = ({ onNavItemClick, currentRoute }) => {
     { name: 'Profile', icon: <User size={20} />, route: 'profile' },
   ];
 
-  // Desktop-only navigation
+
 
   return (
     <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-30">
@@ -32,32 +32,9 @@ const Navbar: React.FC<NavbarProps> = ({ onNavItemClick, currentRoute }) => {
             </div>
           </div>
           
-          {/* Desktop navigation */}
-          <div className="hidden md:flex md:items-center md:space-x-4">
-            {navItems.map((item) => (
-              <button
-                key={item.route}
-                onClick={() => onNavItemClick(item.route)}
-                className={`
-                  px-3 py-2 rounded-md text-sm font-medium flex items-center transition-colors
-                  ${currentRoute === item.route 
-                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300' 
-                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'}
-                `}
-              >
-                <span className="mr-2">{item?.icon}</span>
-                {item.name}
-              </button>
-            ))}
-          </div>
-          
-          {/* Desktop-only navigation - no mobile menu needed */}
+          {
+}
         </div>
       </div>
 
-      {/* Desktop-only navigation - no mobile menu */}
-    </nav>
-  );
-};
-
-export default Navbar;
+      {

@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 
-// https://vitejs.dev/config/
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -28,15 +28,15 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Core React
+
           'react-vendor': ['react', 'react-dom'],
           'router-vendor': ['react-router-dom'],
 
-          // UI Libraries
+
           'ui-vendor': ['lucide-react'],
           'animation-vendor': ['framer-motion'],
 
-          // External Services
+
           'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
           'ai-vendor': ['@google/generative-ai'],
         },

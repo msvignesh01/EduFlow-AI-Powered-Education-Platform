@@ -1,4 +1,4 @@
-// Premium Local Storage Service for Offline Data Management
+
 interface StorageItem<T = any> {
   data: T;
   timestamp: number;
@@ -8,7 +8,7 @@ interface StorageItem<T = any> {
 }
 
 interface CacheConfig {
-  defaultTTL: number; // Time to live in milliseconds
+  defaultTTL: number;
   maxItems: number;
   enableCompression: boolean;
   enableEncryption: boolean;
@@ -21,24 +21,24 @@ class PremiumStorageService {
 
   constructor() {
     this.config = {
-      defaultTTL: 24 * 60 * 60 * 1000, // 24 hours
+      defaultTTL: 24 * 60 * 60 * 1000,
       maxItems: 1000,
-      enableCompression: false, // Would require compression library
-      enableEncryption: false    // Would require crypto library
+      enableCompression: false,
+      enableEncryption: false
     };
 
-    // Initialize storage
+
     this.initializeStorage();
   }
 
   private initializeStorage() {
     try {
-      // Check storage availability
+
       if (!this.isStorageAvailable()) {
         console.warn('LocalStorage not available, using memory fallback');
       }
 
-      // Clean up expired items on initialization
+
       this.cleanupExpired();
       
       console.log('📦 Premium Storage Service initialized');
@@ -63,16 +63,16 @@ class PremiumStorageService {
   }
 
   private compressData(data: any): string {
-    // Simple compression simulation - in production would use actual compression
+
     return JSON.stringify(data);
   }
 
   private decompressData(data: string): any {
-    // Simple decompression simulation
+
     return JSON.parse(data);
   }
 
-  // Store data with advanced options
+
   async setItem<T>(
     key: string, 
     data: T, 
@@ -101,7 +101,7 @@ class PremiumStorageService {
         serializedData = this.compressData(storageItem);
       }
 
-      // Check storage limits
+
       await this.ensureStorageSpace(serializedData.length);
 
       localStorage.setItem(storageKey, serializedData);
@@ -113,7 +113,7 @@ class PremiumStorageService {
     }
   }
 
-  // Retrieve data with validation
+
   async getItem<T>(key: string): Promise<T | null> {
     try {
       const storageKey = this.generateKey(key);
@@ -128,18 +128,18 @@ class PremiumStorageService {
       try {
         storageItem = JSON.parse(serializedData);
       } catch {
-        // Try decompression if parsing fails
+
         storageItem = this.decompressData(serializedData);
       }
 
-      // Check expiration
+
       if (storageItem.expires && Date.now() > storageItem.expires) {
         await this.removeItem(key);
         console.log(`🗑️ Expired item removed: ${key}`);
         return null;
       }
 
-      // Version check
+
       if (storageItem.version !== this.version) {
         console.warn(`Version mismatch for ${key}, removing outdated item`);
         await this.removeItem(key);
@@ -154,7 +154,7 @@ class PremiumStorageService {
     }
   }
 
-  // Remove specific item
+
   async removeItem(key: string): Promise<void> {
     try {
       const storageKey = this.generateKey(key);
@@ -165,7 +165,7 @@ class PremiumStorageService {
     }
   }
 
-  // Clear all app data
+
   async clear(): Promise<void> {
     try {
       const keys = Object.keys(localStorage).filter(key => 
@@ -179,7 +179,7 @@ class PremiumStorageService {
     }
   }
 
-  // Get storage statistics
+
   getStats(): {
     totalItems: number;
     totalSize: number;
@@ -240,7 +240,7 @@ class PremiumStorageService {
     };
   }
 
-  // Cleanup expired items
+
   private async cleanupExpired(): Promise<number> {
     const keys = Object.keys(localStorage).filter(key => 
       key.startsWith(this.storagePrefix)
@@ -260,7 +260,7 @@ class PremiumStorageService {
           }
         }
       } catch (error) {
-        // Remove invalid items
+
         localStorage.removeItem(key);
         removedCount++;
       }
@@ -273,21 +273,21 @@ class PremiumStorageService {
     return removedCount;
   }
 
-  // Ensure storage space by removing old items if needed
+
   private async ensureStorageSpace(newItemSize: number): Promise<void> {
     const stats = this.getStats();
     const estimatedNewTotal = stats.totalSize + newItemSize;
     
-    // Rough estimate of localStorage limit (5MB)
+
     const storageLimit = 5 * 1024 * 1024;
     
     if (estimatedNewTotal > storageLimit || stats.totalItems >= this.config.maxItems) {
       console.log('⚠️ Storage limit approaching, cleaning up...');
       
-      // First cleanup expired items
+
       await this.cleanupExpired();
       
-      // If still over limit, remove oldest items
+
       const updatedStats = this.getStats();
       if (updatedStats.totalItems >= this.config.maxItems) {
         const keys = Object.keys(localStorage)
@@ -307,7 +307,7 @@ class PremiumStorageService {
           .filter(Boolean)
           .sort((a, b) => a!.timestamp - b!.timestamp);
 
-        // Remove oldest 25% of items
+
         const itemsToRemove = Math.ceil(keys.length * 0.25);
         for (let i = 0; i < itemsToRemove && i < keys.length; i++) {
           localStorage.removeItem(keys[i]!.key);
@@ -318,7 +318,7 @@ class PremiumStorageService {
     }
   }
 
-  // Cache management for AI responses
+
   async cacheAIResponse(
     prompt: string, 
     response: string, 
@@ -331,7 +331,7 @@ class PremiumStorageService {
       model,
       cached: true
     }, {
-      ttl: 2 * 60 * 60 * 1000, // 2 hours cache for AI responses
+      ttl: 2 * 60 * 60 * 1000,
       priority: 'medium'
     });
   }
@@ -348,21 +348,21 @@ class PremiumStorageService {
     return cached?.response || null;
   }
 
-  // Simple hash function for cache keys
+
   private hashString(str: string): string {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
       hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32-bit integer
+      hash = hash & hash;
     }
     return Math.abs(hash).toString(36);
   }
 
-  // Save user preferences
+
   async saveUserPreferences(preferences: Record<string, any>): Promise<void> {
     await this.setItem('user_preferences', preferences, {
-      ttl: 30 * 24 * 60 * 60 * 1000, // 30 days
+      ttl: 30 * 24 * 60 * 60 * 1000,
       priority: 'high'
     });
   }
@@ -371,11 +371,11 @@ class PremiumStorageService {
     return this.getItem('user_preferences');
   }
 
-  // Study session data
+
   async saveStudySession(sessionData: any): Promise<void> {
     const sessionKey = `study_session_${Date.now()}`;
     await this.setItem(sessionKey, sessionData, {
-      ttl: 7 * 24 * 60 * 60 * 1000, // 7 days
+      ttl: 7 * 24 * 60 * 60 * 1000,
       priority: 'high'
     });
   }
@@ -396,7 +396,7 @@ class PremiumStorageService {
     return sessions.sort((a: any, b: any) => b.timestamp - a.timestamp);
   }
 
-  // Export data for backup
+
   async exportData(): Promise<string> {
     const keys = Object.keys(localStorage).filter(key => 
       key.startsWith(this.storagePrefix)
@@ -418,7 +418,7 @@ class PremiumStorageService {
     });
   }
 
-  // Import data from backup
+
   async importData(exportedData: string): Promise<void> {
     try {
       const parsed = JSON.parse(exportedData);
@@ -427,10 +427,10 @@ class PremiumStorageService {
         console.warn('Version mismatch in imported data');
       }
 
-      // Clear existing data
+
       await this.clear();
 
-      // Import new data
+
       Object.entries(parsed.data).forEach(([key, value]) => {
         localStorage.setItem(key, value as string);
       });
@@ -443,7 +443,7 @@ class PremiumStorageService {
   }
 }
 
-// Create singleton instance
+
 export const storageService = new PremiumStorageService();
 
 export default storageService;

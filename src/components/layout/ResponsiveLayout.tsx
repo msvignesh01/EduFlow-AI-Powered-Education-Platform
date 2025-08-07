@@ -44,7 +44,7 @@ export const ResponsiveLayout: React.FC<ResponsiveLayoutProps> = ({
   );
 };
 
-// Grid layout component
+
 interface ResponsiveGridProps {
   children: React.ReactNode;
   columns?: {
@@ -97,7 +97,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   );
 };
 
-// Responsive stack component
+
 interface ResponsiveStackProps {
   children: React.ReactNode;
   direction?: 'vertical' | 'horizontal' | 'responsive';
@@ -115,12 +115,12 @@ export const ResponsiveStack: React.FC<ResponsiveStackProps> = ({
   justify = 'start',
   className = '',
 }) => {
-  // Desktop-only layout - no mobile responsiveness needed
+
 
   const directionClasses = {
     vertical: 'flex flex-col',
     horizontal: 'flex flex-row',
-    responsive: 'flex flex-row', // Always horizontal on desktop
+    responsive: 'flex flex-row',
   };
 
   const spacingClasses = {
@@ -161,7 +161,7 @@ export const ResponsiveStack: React.FC<ResponsiveStackProps> = ({
   );
 };
 
-// Responsive text component
+
 interface ResponsiveTextProps {
   children: React.ReactNode;
   size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | 'hero';
@@ -217,7 +217,7 @@ export const ResponsiveText: React.FC<ResponsiveTextProps> = ({
   );
 };
 
-// Responsive section component
+
 interface ResponsiveSectionProps {
   children: React.ReactNode;
   spacing?: 'tight' | 'normal' | 'loose';
@@ -257,7 +257,7 @@ export const ResponsiveSection: React.FC<ResponsiveSectionProps> = ({
   );
 };
 
-// Responsive container with motion
+
 interface MotionContainerProps {
   children: React.ReactNode;
   className?: string;

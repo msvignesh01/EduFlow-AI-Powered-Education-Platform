@@ -1,7 +1,7 @@
 import React from 'react';
 import { log } from './logger';
 
-// Debounce function for performance optimization
+
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
@@ -14,7 +14,7 @@ export function debounce<T extends (...args: any[]) => any>(
   };
 }
 
-// Throttle function for performance optimization
+
 export function throttle<T extends (...args: any[]) => any>(
   func: T,
   limit: number
@@ -30,7 +30,7 @@ export function throttle<T extends (...args: any[]) => any>(
   };
 }
 
-// Memoization for expensive computations
+
 export function memoize<T extends (...args: any[]) => any>(
   func: T,
   getKey?: (...args: Parameters<T>) => string
@@ -50,7 +50,7 @@ export function memoize<T extends (...args: any[]) => any>(
   }) as T;
 }
 
-// Performance measurement
+
 export class PerformanceMonitor {
   private static measurements = new Map<string, number[]>();
   
@@ -103,7 +103,7 @@ export class PerformanceMonitor {
   }
 }
 
-// Lazy loading utility
+
 export function createLazyComponent<T extends React.ComponentType<any>>(
   importFunc: () => Promise<{ default: T }>,
   fallback?: React.ComponentType
@@ -122,7 +122,7 @@ export function createLazyComponent<T extends React.ComponentType<any>>(
   });
 }
 
-// Image optimization
+
 export function optimizeImage(
   src: string,
   options: {
@@ -132,12 +132,12 @@ export function optimizeImage(
     format?: 'webp' | 'jpeg' | 'png';
   } = {}
 ): string {
-  // In a real app, you might use a service like Cloudinary or ImageKit
-  // For now, just return the original src
+
+
   return src;
 }
 
-// Bundle size monitoring
+
 export function reportBundleSize() {
   if ('performance' in window && 'getEntriesByType' in performance) {
     const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
@@ -161,7 +161,7 @@ export function reportBundleSize() {
   }
 }
 
-// Memory usage monitoring
+
 export function reportMemoryUsage() {
   if ('memory' in performance) {
     const memory = (performance as any).memory;
@@ -173,9 +173,9 @@ export function reportMemoryUsage() {
   }
 }
 
-// Initialize performance monitoring in development
+
 if (process.env.NODE_ENV === 'development') {
-  // Report bundle size after load
+
   window.addEventListener('load', () => {
     setTimeout(() => {
       reportBundleSize();
@@ -183,6 +183,6 @@ if (process.env.NODE_ENV === 'development') {
     }, 1000);
   });
   
-  // Report memory usage periodically
+
   setInterval(reportMemoryUsage, 30000);
 }

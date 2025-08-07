@@ -133,10 +133,10 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 }
 
-// Hook version for functional components
+
 export const useErrorHandler = () => {
   return (error: Error, errorInfo?: ErrorInfo) => {
     console.error('Error caught:', error, errorInfo);
-    // You could also send this to an error reporting service
+
   };
 };

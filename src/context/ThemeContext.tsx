@@ -27,20 +27,20 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const newTheme = isDark ? 'light' : 'dark';
     setTheme(newTheme);
 
-    // Reset transition state after animation
+
     setTimeout(() => setIsTransitioning(false), 300);
   };
 
   useEffect(() => {
     const root = window.document.documentElement;
 
-    // Save theme preference to localStorage
+
     localStorage.setItem('theme', theme);
 
-    // Add smooth transition
+
     root.style.transition = 'background-color 0.3s ease, color 0.3s ease';
 
-    // Handle system theme
+
     if (theme === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.classList.remove('dark', 'light');
@@ -52,7 +52,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setIsDark(theme === 'dark');
     }
 
-    // Set CSS custom properties for better theme integration
+
     if (isDark) {
       root.style.setProperty('--bg-primary', '#0f172a');
       root.style.setProperty('--bg-secondary', '#1e293b');
@@ -65,13 +65,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       root.style.setProperty('--text-secondary', '#475569');
     }
 
-    // Remove transition after theme change
+
     setTimeout(() => {
       root.style.transition = '';
     }, 300);
   }, [theme, isDark]);
 
-  // Listen for system theme changes
+
   useEffect(() => {
     if (theme === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');

@@ -6,7 +6,7 @@ interface TypographyProps {
   as?: keyof JSX.IntrinsicElements;
 }
 
-// Heading components
+
 export const H1: React.FC<TypographyProps> = ({ children, className = '', as: Component = 'h1' }) => (
   <Component className={`text-3xl md:text-4xl font-bold text-gray-900 dark:text-white ${className}`}>
     {children}
@@ -31,7 +31,7 @@ export const H4: React.FC<TypographyProps> = ({ children, className = '', as: Co
   </Component>
 );
 
-// Body text components
+
 export const Body: React.FC<TypographyProps> = ({ children, className = '', as: Component = 'p' }) => (
   <Component className={`text-base text-gray-700 dark:text-gray-300 leading-relaxed ${className}`}>
     {children}
@@ -50,7 +50,7 @@ export const Caption: React.FC<TypographyProps> = ({ children, className = '', a
   </Component>
 );
 
-// Utility components
+
 export const Muted: React.FC<TypographyProps> = ({ children, className = '', as: Component = 'span' }) => (
   <Component className={`text-gray-500 dark:text-gray-400 ${className}`}>
     {children}
@@ -79,7 +79,7 @@ export const Link: React.FC<TypographyProps & { href?: string; onClick?: () => v
   </Component>
 );
 
-// Layout components
+
 export const Section: React.FC<TypographyProps> = ({ children, className = '', as: Component = 'section' }) => (
   <Component className={`space-y-6 ${className}`}>
     {children}

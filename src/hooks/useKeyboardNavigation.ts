@@ -29,7 +29,7 @@ export const useKeyboardNavigation = ({
   }, [isOpen, handleKeyDown]);
 };
 
-// Focus trap hook for modals
+
 export const useFocusTrap = (isActive: boolean) => {
   useEffect(() => {
     if (!isActive) return;
@@ -66,7 +66,7 @@ export const useFocusTrap = (isActive: boolean) => {
   }, [isActive]);
 };
 
-// Skip to content functionality
+
 export const useSkipToContent = () => {
   const skipToContent = useCallback(() => {
     const mainContent = document.getElementById('main-content');

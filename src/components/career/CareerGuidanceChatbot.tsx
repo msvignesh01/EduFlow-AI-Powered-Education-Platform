@@ -12,7 +12,7 @@ interface CareerPath {
   jobOutlook: string;
 }
 
-// Mock career paths data
+
 const careerPaths: CareerPath[] = [
   {
     id: "1",
@@ -75,7 +75,7 @@ const CareerGuidanceChatbot: React.FC = () => {
   const handleSendMessage = () => {
     if (inputValue.trim() === '') return;
     
-    // Add user message
+
     const userMessage: Message = {
       id: Date.now().toString(),
       content: inputValue,
@@ -86,14 +86,14 @@ const CareerGuidanceChatbot: React.FC = () => {
     setMessages((prev) => [...prev, userMessage]);
     setInputValue('');
     
-    // Simulate bot thinking
+
     setIsTyping(true);
     
-    // Simulate bot response with career suggestions
+
     setTimeout(() => {
       setIsTyping(false);
       
-      // Simple keyword matching for career suggestions
+
       const lowerCaseInput = inputValue.toLowerCase();
       let suggestedCareer: CareerPath | undefined;
       
@@ -105,7 +105,7 @@ const CareerGuidanceChatbot: React.FC = () => {
         suggestedCareer = careerPaths.find(path => path.title === "Healthcare");
       }
       
-      // Generic response if no specific career is matched
+
       if (!suggestedCareer) {
         const botMessage: Message = {
           id: Date.now().toString(),
@@ -115,7 +115,7 @@ const CareerGuidanceChatbot: React.FC = () => {
         };
         setMessages((prev) => [...prev, botMessage]);
       } else {
-        // Response with career suggestion
+
         const botMessage: Message = {
           id: Date.now().toString(),
           content: `Based on your interests, you might enjoy exploring a career in ${suggestedCareer.title}!`,

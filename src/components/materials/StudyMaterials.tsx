@@ -5,7 +5,7 @@ import Input from '../ui/Input';
 import { Card, CardContent, CardHeader } from '../ui/Card';
 import { StudyMaterial } from '../../types';
 
-// Mock study materials data
+
 const mockStudyMaterials: StudyMaterial[] = [
   {
     id: "1",
