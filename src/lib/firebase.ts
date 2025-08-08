@@ -80,7 +80,7 @@ if (import.meta.env.DEV && typeof window !== 'undefined') {
   const hostname = window.location.hostname;
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     try {
-      connectAuthEmulator(auth, 'http:
+      connectAuthEmulator(auth, 'http://localhost:9099');
       connectFirestoreEmulator(db, 'localhost', 8080);
       connectStorageEmulator(storage, 'localhost', 9199);
       connectFunctionsEmulator(functions, 'localhost', 5001);

@@ -105,8 +105,10 @@ export const Button: React.FC<ButtonProps> = ({
       transition={{ duration: 0.2 }}
       {...props}
     >
-      {
-}
+      {shimmer && (
+        <div className="absolute inset-0 -top-[1px] -bottom-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 animate-shimmer" />
+      )}
+      
       <div className="relative flex items-center justify-center">
         {isLoading ? (
           <PremiumLoader variant="spinner" size="sm" />
@@ -145,4 +147,9 @@ export const Button: React.FC<ButtonProps> = ({
         )}
       </div>
 
-      {
+      {glow && (
+        <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600/20 to-purple-600/20 blur-xl -z-10 group-hover:blur-2xl transition-all duration-300" />
+      )}
+    </motion.button>
+  );
+};
