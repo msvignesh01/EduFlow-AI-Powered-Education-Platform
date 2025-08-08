@@ -83,7 +83,6 @@ const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full space-y-8">
-          {
           <div className="text-center">
             <BookOpen className="h-12 w-12 text-blue-600 dark:text-blue-500 mx-auto mb-4" />
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">EduFlow</h1>
@@ -247,3 +246,5 @@ const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
 
   return <>{children}</>;
 };
+
+export default AuthWrapper;
