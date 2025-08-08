@@ -4,13 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
+:root {
 
   --toast-bg: #ffffff;
   --toast-color: #1f2937;
   --toast-border: #e5e7eb;
-
-
 
   --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   --gradient-secondary: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
