@@ -74,51 +74,6 @@ const EduNavbar = () => {
               );
             })}
             
-            {
-}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
-          Welcome to EduFlow
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
-          🤖 AI-Powered Educational Platform with Gemini 2.0 + Ollama
-        </p>
-      </div>
-
-      {
-}
-      {recentSessions.length > 0 && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Recent Activity</h2>
-          <div className="space-y-2">
-            {recentSessions.slice(0, 5).map((session, index) => (
-              <div key={index} className="flex items-center justify-between py-2 border-b border-gray-200 dark:border-gray-700 last:border-0">
-                <div className="flex items-center space-x-3">
-                  <span className="text-2xl">
-                    {session.type === 'quiz' ? '📝' : 
-                     session.type === 'chat' ? '💬' : 
-                     session.type === 'career' ? '🎯' : '📚'}
-                  </span>
-                  <div>
-                    <p className="font-medium text-gray-900 dark:text-white">{session.subject}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {session.duration} minutes
-                      {session.score !== undefined && ` • Score: ${session.score}%`}
-                    </p>
-                  </div>
-                </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {session.completedAt?.toDate ? 
-                    new Date(session.completedAt.toDate()).toLocaleDateString() : 
-                    'Today'}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {
             <button
               onClick={toggleTheme}
               className="p-2 rounded-md text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
