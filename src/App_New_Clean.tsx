@@ -103,12 +103,6 @@ const EduNavbar = () => {
     </nav>
   );
 };
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-};
 
 const Dashboard = () => {
   const [recentSessions, setRecentSessions] = useState<any[]>([]);
